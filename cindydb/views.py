@@ -5,55 +5,47 @@ from forms import Login, Registration
 from cindydb import app
 
 
-@app.route('/homepage.html')
-def homepage1():
-    if session.get('logged_in'):
-        return render_template('/homepage.html')
-    else:
-        return redirect('login.html')
-
-
-@app.route('/charts.html')
+@app.route('/charts')
 def charts():
     if session.get('logged_in'):
         return render_template('/charts.html')
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
 
 
-@app.route('/forms.html')
+@app.route('/forms')
 def forms():
     if session.get('logged_in'):
         return render_template('/forms.html')
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
 
 
-@app.route('/tables.html')
+@app.route('/tables')
 def tables():
     if session.get('logged_in'):
         return render_template('/tables.html')
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
 
 
-@app.route('/bootstrap-elements.html')
+@app.route('/bootstrap-elements')
 def bootstrap_elements():
     if session.get('logged_in'):
         return render_template('/bootstrap-elements.html')
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
 
 
-@app.route('/blank-page.html')
+@app.route('/blank-page')
 def blank_page():
     if session.get('logged_in'):
         return render_template('/blank-page.html')
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
 
 
-@app.route('/login.html')
+@app.route('/login')
 def logout():
     # remove the username from the session if it's there
     session.pop('logged_in', None)
@@ -83,7 +75,7 @@ def register():
             session['username'] = form.username.data
             session['firstname'] = form.firstname.data
             session['lastname'] = form.lastname.data
-            session['password'] = form.password.data
+            session['password'] = hashlib.sha1(form.password.data).hexdigest()
             return redirect(url_for('index'))
         else:
             flash('Username esistente', category='error')
@@ -109,21 +101,15 @@ def login():
             session['username'] = l_form.login_user.data
             session['firstname'] = rec[0]
             session['lastname'] = rec[1]
-            session['password'] = l_form.login_pass.data
-            return redirect('/index')
+            session['password'] = hashlib.sha1(l_form.login_pass.data).hexdigest()
+            return redirect(url_for('index'))
 
     return render_template('login.html', lform=l_form, form=Registration())
 
 
-@app.route('/index')
+@app.route('/')
 def index():
-    # If user is logged in, show useful information here, otherwise show login and register
-    return render_template('homepage.html', lform=Login(), form=Registration())
-
-
-@app.route('/homepage')
-def homepage():
     if session.get('logged_in'):
-        return render_template('/homepage.html')
+        return render_template('homepage.html', lform=Login(), form=Registration())
     else:
-        return redirect('login.html')
+        return redirect(url_for('login'))
