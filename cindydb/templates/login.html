@@ -1,0 +1,70 @@
+{% from "_formhelpers.html" import render_bootstrap_field %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../static/css/sb-admin.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+
+<style>
+    .col-centered {
+        float: none;
+        margin: 0 auto;
+        margin-top: 150px;
+    }
+    .wrath-content-box {
+        padding: 15px;
+    }
+    .table-bordered{
+        background-color:#fbfbfb;
+        border-radius: 0.3em;
+    }
+</style>
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-3 col-centered table-bordered">
+            <form action="{{ url_for('login') }}" id="fileForm" role="form" method = "POST">
+                <div class="wrath-content-box"> <h2>Login</h2> </div>
+                <div class="wrath-content-box">
+                    <div class="form-group">
+                        {{ render_bootstrap_field(lform.login_user,with_label='True', placeholder='username', class='form-control')}}
+                        {{ render_bootstrap_field(lform.login_pass,with_label='True', placeholder='password', class='form-control')}}
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% for category, message in messages %}
+                                {% if messages %}
+                                    <h6 class="help-block" style="color: #ff6666">{{ message }}</h6>
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+
+                        <div class="col-sm-6">
+                            <div class="form-group text-left">
+                                <input type="submit" href="{{ url_for('login') }}" class="btn btn-success btn-sm form-control" value="Accedi" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group text-right">
+                                <a class="btn btn-info btn-sm form-control" href="{{ url_for('register') }}" role="button">Registrati</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

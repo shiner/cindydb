@@ -1,0 +1,11 @@
+{% macro nav_link(endpoint, icon, name) %}
+    {% if request.endpoint.endswith(endpoint) %}
+        <li class='active'>
+            <a href='{{ url_for(endpoint) }}'><i class='{{ icon }}'></i>{{ name }}</a>
+        </li>
+    {% else %}
+        <li>
+            <a href='{{ url_for(endpoint) }}'><i class='{{ icon }}'></i>{{ name }}</a>
+        </li>
+    {% endif %}
+{% endmacro %}

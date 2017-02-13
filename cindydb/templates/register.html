@@ -1,0 +1,67 @@
+{% from "_formhelpers.html" import render_bootstrap_field %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../static/css/sb-admin.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link href="../static/css/style.css" rel="stylesheet" type="text/css">
+    {#    <meta charset="UTF-8">#}
+    <title>Registrazione</title>
+</head>
+
+<style>
+    fieldset {
+        border: thin solid #ccc;
+        border-radius: 0.3em;
+        padding: 20px;
+        background: #fbfbfb;
+    }
+    .col-centered {
+        float: none;
+        margin: 0 auto;
+    }
+    span.req {
+        color:maroon;
+        font-size: 112%;
+    }
+</style>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-centered" style="padding: 50px;">
+            <form action="{{ url_for('register') }}" method=post>
+                <fieldset>
+                    <h2>Registrazione</h2>
+                    <div class="form-group">
+                        {{ render_bootstrap_field(form.firstname,with_label='True', class='form-control') }}
+                        {{ render_bootstrap_field(form.lastname,with_label='True',class='form-control') }}
+                        {{ render_bootstrap_field(form.phonenumber,with_label='True', class='form-control') }}
+                        {{ render_bootstrap_field(form.dob,with_label='True',placeholder='%Y-%m-%d',class='form-control') }}
+                        {{ render_bootstrap_field(form.email,with_label='True',class='form-control') }}
+                        {{ render_bootstrap_field(form.username,with_label='True',class='form-control')}}
+                        {{ render_bootstrap_field(form.password,with_label='True',class='form-control')}}
+                        {{ render_bootstrap_field(form.confirm,with_label='True',class='form-control')}}
+                    </div>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% for category, message in messages %}
+                            {% if messages %}
+                                <h6 class="help-block" style="color: #ff6666">{{ message }}</h6>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+
+                    <div class="form-group" style="padding-top: 15px;">
+                        <input class="btn btn-success" type="submit" name="submit_reg" value="Registrati e accedi">
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
