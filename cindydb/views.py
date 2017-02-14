@@ -112,10 +112,10 @@ def login():
 
 @app.route('/')
 def index():
-    if session.get('logged_in'):
+    # if session.get('logged_in'):
         return render_template('homepage.html', lform=Login(), form=Registration())
-    else:
-        return redirect(url_for('login'))
+    # else:
+    #     return redirect(url_for('login'))
 
 
 @app.route('/view-table')

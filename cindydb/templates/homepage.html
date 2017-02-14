@@ -7,34 +7,60 @@
 
 {% block content %}
     <!-- Page Heading -->
-    <div id="container">
-        <img src="../static/img/banner.png" alt="" style="width: 100%;"/>
-    </div>
+{#    <div id="container">#}
+{#        <img src="../static/img/banner.png" alt="" style="width: 100%;"/>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-lg-12">#}
+{#            <h1 class="page-header">#}
+{#                Home page <small> Overview</small>#}
+{#            </h1>#}
+{#        </div>#}
+{#    </div>#}
+
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Home page <small> Overview</small>
+                Home page </small>
             </h1>
             <ol class="breadcrumb">
                 <li class="active">
-                    <i class="fa fa-dashboard"></i> Dashboard
+                    <i class="fa fa-dashboard"></i> Overview
                 </li>
             </ol>
         </div>
     </div>
-    <!-- /.row -->
 
     <div class="row">
-        <div class="col-lg-12">
-            <div class="alert alert-info alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
-            </div>
-        </div>
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-user" aria-hidden="true" style="padding-top: 50pt"></i> Modifica il tuo profilo</h4>
+      Accedi al tuo profilo, potrai visualizzare e modificare i dati inseriti in fase di registrazione.
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-fw fa-bar-chart-o" aria-hidden="true" style="padding-top: 50pt"></i> Visualizza statistiche</h4>
+      La sezione dedicata alle statistiche mostrerà ....
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-fw fa-edit" aria-hidden="true" style="padding-top: 50pt"></i> Modifica i dati</h4>
+      Accedi all'area Forms, inserisci e/o modifica i dati relativi a ...
+    </div>
+
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-fw fa-table" aria-hidden="true" style="padding-top: 50pt"></i> Visualizza i dati</h4>
+      Sezione dedicata alla visualizzazione dei dati relativi a ....
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-bell" aria-hidden="true" style="padding-top: 50pt"></i> Le tue notifiche</h4>
+      Visualizza in ogni momento l'elenco delle operazioni svolte.
+    </div>
+    <div class="col-md-4 col-sm-6">
+      <h4><i class="fa fa-th-list" aria-hidden="true" style="padding-top: 50pt"></i> Visualizza tabelle</h4>
+      Le sottosezioni di Tables ....
+    </div>
     </div>
     <!-- /.row -->
 
-    <div class="row">
+    <div class="row"  style="padding-top: 100pt">
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -57,6 +83,7 @@
                 </a>
             </div>
         </div>
+
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-green">
                 <div class="panel-heading">
