@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, validators, DateField
+from wtforms import Form, StringField, PasswordField, validators, DateField, SelectField, RadioField
 
 
 class Registration(Form):
@@ -9,6 +9,12 @@ class Registration(Form):
     phonenumber = StringField('Numero di telefono')
 
     dob = DateField('Data di nascita', validators=[validators.Optional()])
+
+    gender = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'),
+                                                           ('donna', 'Donna')],
+                         validators=[validators.Optional()])
+
+    city = StringField('Residenza', validators=[validators.Optional()])
 
     username = StringField('Username', validators=[validators.DataRequired('Inserisci il tuo username.'),
                                                    validators.Length(message='Username non valido: lunghezza minima 4.',
