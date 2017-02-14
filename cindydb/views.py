@@ -61,7 +61,7 @@ def logout():
 def register():
     form = Registration(request.form)
     if request.method == 'POST' and form.validate():
-        cursor, conn = database.get_db()
+        cursor, conn = database.connect_db()
         cursor.execute("SELECT * FROM utenti WHERE username = %s", (form.username.data, ))
         conn.commit()
         if cursor.fetchone() is None:
@@ -89,7 +89,7 @@ def register():
 def login():
     l_form = Login(request.form)
     if request.method == 'POST' and l_form.validate():
-        cursor, conn = database.get_db()
+        cursor, conn = database.connect_db()
         cursor.execute("SELECT nome, cognome FROM utenti WHERE username = %s AND psw = %s ",
                        (l_form.login_user.data, hashlib.sha1(l_form.login_pass.data).hexdigest()))
         data = cursor.fetchone()
@@ -120,7 +120,7 @@ def index():
 @app.route('/view-table')
 def view_table():
     if session.get('logged_in'):
-        cursor, conn = database.get_db()
+        cursor, conn = database.connect_db()
         schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
         cursor.execute("SELECT " + schema_to_view + " FROM utenti")
         conn.commit()
@@ -135,7 +135,7 @@ def view_table():
 @app.route('/profile')
 def profile():
     if session.get('logged_in'):
-        cursor, conn = database.get_db()
+        cursor, conn = database.connect_db()
         schema = 'nome, cognome, data_nascita, tel, email, sesso, residenza, username'
         cursor.execute("SELECT " + schema + " FROM utenti WHERE username = %s AND psw = %s ",
                        (session.get('username'), session.get('psw')))
@@ -150,15 +150,35 @@ def profile():
         return redirect(url_for('login'))
 
 
-@app.route('/edit-profile')
-def edit_profile():
+@app.route('/edit-profile', methods=['GET', 'POST'])
+def editprofile():
     if session.get('logged_in'):
+        old_form = Registration(request.form)
+        old_form = database.get_profile(old_form, session.get('username'), session.get('psw'))
+        if request.method == 'POST':
+            new_form = Registration(request.form)
+            new_form.username.data = session.get('username')
+            if new_form.validate():
+                cursor, conn = database.connect_db()
+                cursor.execute("UPDATE utenti SET (nome, cognome, tel, data_nascita, email, residenza, sesso, psw) = ( %s, %s, %s, %s, %s, %s, %s, %s ) "
+                               "WHERE username = %s", \
+                                (new_form.firstname.data, new_form.lastname.data, new_form.phonenumber.data, new_form.dob.data,
+                                 new_form.email.data, new_form.city.data, new_form.gender.data, hashlib.sha1(new_form.password.data).hexdigest(),
+                                 session.get('username')))
+                conn.commit()
+                database.close_connection()
+                flash('Profilo aggiornato', category='success')
+                session['psw'] = hashlib.sha1(new_form.password.data).hexdigest()
+                session['firstname'] = new_form.firstname.data
+                session['lastname'] = new_form.lastname.data
+            else:
+                return render_template('/edit-profile.html', form=new_form)
 
-        return render_template('/edit-profile.html', form=Registration())
+            return redirect(url_for('profile'))
+        else:
+            return render_template('/edit-profile.html', form=old_form)
     else:
         return redirect(url_for('login'))
-
-
 
 
  # cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND "
