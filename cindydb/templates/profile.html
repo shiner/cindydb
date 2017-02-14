@@ -88,6 +88,17 @@
                                                 {% endif %}
                                                 </tr>
                                             {% endfor %}
+                                        <tr>
+                                            <td>Password</td>
+
+                                            <td>
+                                                <div class="form-inline">
+                                                    <input class="form-control" type="password" value="hunter2" id="example-password-input" readonly>
+                                                    <a href="#" title="Change password" data-toggle="tooltip" type="button" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                </div>
+                                            </td>
+
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -96,13 +107,16 @@
 
                         <div class="panel-footer">
 
-                            <a href="#" title="Edit this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="{{ url_for('edit_profile') }}" title="Edit profile" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
                             <div class="pull-right">
                                 <a title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
                             </div>
                             <script>
                                 $('[data-toggle="tooltip"]').tooltip();
                             </script>
+
+
+
                         </div>
                     </div>
                 </div>

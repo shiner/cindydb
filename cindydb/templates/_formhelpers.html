@@ -1,6 +1,6 @@
 {% macro render_bootstrap_field(field) -%}
 
-    {% set with_label = kwargs.pop('with_label', False) %}
+{% set with_label = kwargs.pop('with_label', False) %}
 {% set placeholder = kwargs.pop('placeholder', field.label.text) %}
 {% set class_ = kwargs.pop('class_', '') %}
 

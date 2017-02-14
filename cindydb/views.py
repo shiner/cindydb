@@ -150,6 +150,14 @@ def profile():
         return redirect(url_for('login'))
 
 
+@app.route('/edit-profile')
+def edit_profile():
+    if session.get('logged_in'):
+        return render_template('/profile.html', data=zip(schema_to_view, data), gender=data[5])
+    else:
+        return redirect(url_for('login'))
+
+
 
  # cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND "
         #                "table_name='utenti'")

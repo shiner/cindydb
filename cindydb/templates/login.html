@@ -38,7 +38,6 @@
                     <div class="form-group">
                         {{ render_bootstrap_field(lform.login_user,with_label='True', placeholder='username', class='form-control')}}
                         {{ render_bootstrap_field(lform.login_pass,with_label='True', placeholder='password', class='form-control')}}
-
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% for category, message in messages %}
                                 {% if messages %}
@@ -67,4 +66,3 @@
 
 </body>
 </html>
-
