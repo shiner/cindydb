@@ -153,9 +153,11 @@ def profile():
 @app.route('/edit-profile')
 def edit_profile():
     if session.get('logged_in'):
-        return render_template('/profile.html', data=zip(schema_to_view, data), gender=data[5])
+
+        return render_template('/edit-profile.html', form=Registration())
     else:
         return redirect(url_for('login'))
+
 
 
 
