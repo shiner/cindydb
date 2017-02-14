@@ -2,8 +2,9 @@
 from flask import request, session, redirect, url_for, render_template, flash
 import database
 import hashlib
-from forms import Login, Registration
+from forms import *
 from cindydb import app
+from psycopg2 import extras
 
 
 @app.route('/charts')
@@ -153,30 +154,55 @@ def profile():
 @app.route('/edit-profile', methods=['GET', 'POST'])
 def editprofile():
     if session.get('logged_in'):
-        old_form = Registration(request.form)
-        old_form = database.get_profile(old_form, session.get('username'), session.get('psw'))
+        old_form = Edit(request.form)
+        old_form = database.get_profile(old_form, session.get('username'))
         if request.method == 'POST':
-            new_form = Registration(request.form)
-            new_form.username.data = session.get('username')
+            new_form = Edit(request.form)
             if new_form.validate():
                 cursor, conn = database.connect_db()
-                cursor.execute("UPDATE utenti SET (nome, cognome, tel, data_nascita, email, residenza, sesso, psw) = ( %s, %s, %s, %s, %s, %s, %s, %s ) "
-                               "WHERE username = %s", \
-                                (new_form.firstname.data, new_form.lastname.data, new_form.phonenumber.data, new_form.dob.data,
-                                 new_form.email.data, new_form.city.data, new_form.gender.data, hashlib.sha1(new_form.password.data).hexdigest(),
-                                 session.get('username')))
+                cursor.execute(
+                    "UPDATE utenti SET (nome, cognome, tel, data_nascita, email, residenza, sesso) = ( %s, %s, %s, %s, %s, %s, %s ) "
+                    "WHERE username = %s", \
+                    (new_form.firstname_edited.data, new_form.lastname_edited.data, new_form.phonenumber_edited.data, new_form.dob_edited.data,
+                     new_form.email_edited.data, new_form.city_edited.data, new_form.gender_edited.data,
+                     session.get('username')))
                 conn.commit()
                 database.close_connection()
                 flash('Profilo aggiornato', category='success')
-                session['psw'] = hashlib.sha1(new_form.password.data).hexdigest()
-                session['firstname'] = new_form.firstname.data
-                session['lastname'] = new_form.lastname.data
+                session['firstname'] = new_form.firstname_edited.data
+                session['lastname'] = new_form.lastname_edited.data
             else:
                 return render_template('/edit-profile.html', form=new_form)
-
             return redirect(url_for('profile'))
         else:
             return render_template('/edit-profile.html', form=old_form)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/change-password', methods=['GET', 'POST'])
+def changepassword():
+    if session.get('logged_in'):
+        form_change_psw = ChangePassword(request.form)
+        if request.method == 'POST':
+            if form_change_psw.validate():
+                cursor, conn = database.connect_db()
+                dict_cur = conn.cursor(cursor_factory=extras.DictCursor)
+                dict_cur.execute("SELECT psw FROM utenti WHERE username = %s", (session.get('username'),))
+                res = dict_cur.fetchone()
+                conn.commit()
+                if res['psw'] == hashlib.sha1(form_change_psw.oldpassword.data).hexdigest():
+                    cursor.execute(
+                        "UPDATE utenti SET psw = %s WHERE username = %s",
+                        (hashlib.sha1(form_change_psw.newpassword.data).hexdigest(), session.get('username')))
+                    conn.commit()
+                    database.close_connection()
+                    flash('Password modificata', category='success')
+                    session['psw'] = hashlib.sha1(form_change_psw.newpassword.data).hexdigest()
+                else:
+                    return render_template('/change-password.html', form=form_change_psw)
+            return redirect(url_for('profile'))
+        return render_template('/change-password.html', form=form_change_psw)
     else:
         return redirect(url_for('login'))
 

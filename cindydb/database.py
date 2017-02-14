@@ -21,22 +21,19 @@ def close_connection():
         conn.close()
 
 
-def get_profile(form, username, psw):
+def get_profile(form, username):
     cursor, conn = connect_db()
     schema = 'nome, cognome, data_nascita, tel, email, sesso, residenza'
-    cursor.execute("SELECT " + schema + " FROM utenti WHERE username = %s AND psw = %s ",
-                   (username, psw))
+    cursor.execute("SELECT " + schema + " FROM utenti WHERE username = %s",
+                   (username, ))
     conn.commit()
     res = cursor.fetchall()
     close_connection()
-    form.firstname.data = res[0][0]
-    form.lastname.data = res[0][1]
-    form.phonenumber.data = res[0][3]
-    form.dob.data = res[0][2]
-    form.gender.data = res[0][5]
-    form.city.data = res[0][6]
-    form.username.data = username
-    form.email.data = res[0][4]
-    form.password.data = res[0][4]
-    form.email.data = res[0][4]
+    form.firstname_edited.data = res[0][0]
+    form.lastname_edited.data = res[0][1]
+    form.phonenumber_edited.data = res[0][3]
+    form.dob_edited.data = res[0][2]
+    form.gender_edited.data = res[0][5]
+    form.city_edited.data = res[0][6]
+    form.email_edited.data = res[0][4]
     return form
