@@ -2,4 +2,4 @@ from flask import Flask
 
 app = Flask(__name__)
 
-import cindydb.views
+from cindydb.views import user, views

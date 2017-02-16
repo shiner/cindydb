@@ -1,34 +1,41 @@
 import psycopg2
 from flask import g
-import forms
+from cindydb import app
 
 conn_string = "host='localhost' dbname='db_project' user='postgres' password='frrnrt'"
 
 
 def connect_db():
     """Connects to the specific database."""
-    print "Connecting to database\n	->%s" % (conn_string)
+    print "Connecting to database\n	->%s" % conn_string
     conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
-    return cursor, conn
+    return conn
 
 
-def close_connection():
-    db = getattr(g, '_database', None)
-    if db is not None:
-        print "Close connection.\n"
-        cur, conn = db
-        conn.close()
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, '_database'):
+        g._database = connect_db()
+    return g._database
+
+
+@app.teardown_appcontext
+def close_connection(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, '_database'):
+        g._database.close()
 
 
 def get_profile(form, username):
-    cursor, conn = connect_db()
+    conn = get_db()
+    cur = conn.cursor()
     schema = 'nome, cognome, data_nascita, tel, email, sesso, residenza'
-    cursor.execute("SELECT " + schema + " FROM utenti WHERE username = %s",
+    cur.execute("SELECT " + schema + " FROM utenti WHERE username = %s",
                    (username, ))
     conn.commit()
-    res = cursor.fetchall()
-    close_connection()
+    res = cur.fetchall()
     form.firstname_edited.data = res[0][0]
     form.lastname_edited.data = res[0][1]
     form.phonenumber_edited.data = res[0][3]
