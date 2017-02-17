@@ -7,7 +7,7 @@ conn_string = "host='localhost' dbname='db_project' user='postgres' password='fr
 
 def connect_db():
     """Connects to the specific database."""
-    print "Connecting to database\n	->%s" % conn_string
+    print "Connecting to database..."
     conn = psycopg2.connect(conn_string)
     return conn
 
@@ -28,19 +28,29 @@ def close_connection(error):
         g._database.close()
 
 
-def get_profile(form, username):
+def select_query(attributes, table, condition, cond_values):
     conn = get_db()
     cur = conn.cursor()
-    schema = 'nome, cognome, data_nascita, tel, email, sesso, residenza'
-    cur.execute("SELECT " + schema + " FROM utenti WHERE username = %s",
-                   (username, ))
+    if condition:
+        cur.execute("SELECT " + attributes + " FROM " + table + " WHERE " + condition, cond_values)
+    else:
+        cur.execute("SELECT " + attributes + " FROM " + table)
     conn.commit()
     res = cur.fetchall()
-    form.firstname_edited.data = res[0][0]
-    form.lastname_edited.data = res[0][1]
-    form.phonenumber_edited.data = res[0][3]
-    form.dob_edited.data = res[0][2]
-    form.gender_edited.data = res[0][5]
-    form.city_edited.data = res[0][6]
-    form.email_edited.data = res[0][4]
-    return form
+    return res
+
+
+def update_query(attributes, n, table, condition, cond_values):
+    s = '(' + '%s, ' * (n - 1) + '%s )'
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("UPDATE " + table + " SET " + attributes + " = " + s + "WHERE " + condition, cond_values)
+    conn.commit()
+
+
+def insert_query(attributes, n, table, cond_values):
+    s = '(' + '%s, ' * (n - 1) + '%s )'
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO " + table + " " + attributes + " VALUES " + s, cond_values)
+    conn.commit()

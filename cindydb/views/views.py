@@ -58,13 +58,8 @@ def index():
 @app.route('/view-table')
 def view_table():
     if session.get('logged_in'):
-        conn = cindydb.database.get_db()
-        cur = conn.cursor()
         schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
-        cur.execute("SELECT " + schema_to_view + " FROM utenti")
-        conn.commit()
-        data = cur.fetchall()
-        print schema_to_view.split(','), data
+        data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
         return render_template('/view-table.html', schema_to_view=schema_to_view.split(','), data=data)
     else:
         return redirect(url_for('login'))
