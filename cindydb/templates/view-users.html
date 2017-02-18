@@ -40,34 +40,39 @@
     <div class="row">
         <div class="col-lg-12">
             <h2>Users table</h2>
-{#            <a id="button" href="{{ url_for('edit_tuple') }}" title="Edit profile" data-toggle="tooltip" type="button"#}
-{#               class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i>Modifica</a>#}
-            <button id="button" class="btn btn-default">getSelectedRow</button></div>
 
-        <table id="table" class="table table-hover table-striped"
-               data-sort-name="stargazers_count"
-               data-sort-order="desc"
-               data-search="true"
-               data-show-refresh="true"
-               data-show-toggle="true"
-               data-show-columns="true"
-               data-click-to-select="true"
-               data-pagination="true"
-        >
-            <thead>
-            <tr>
-                <th data-field="state" data-checkbox="true"></th>
-                {% for column in schema_to_view %}
-                    <th data-field={{column}}>{{column}}</th>
-                {% endfor %}
+            <div id="toolbar" >
+                <button id="button" type="button" class="btn btn-danger" style="margin-right: 20px">
+                    <i class="glyphicon glyphicon-remove"></i> Cancella</button>
+                <button id="button" type="button" class="btn btn-info">
+                    <i class="glyphicon glyphicon-pencil"></i> Modifica</button>
 
-            </tr>
-            </thead>
-        </table>
+            </div>
+            <table id="table" class="table table-hover table-striped"
+                   data-sort-name="stargazers_count"
+                   data-sort-order="desc"
+                   data-search="true"
+                   data-show-refresh="true"
+                   data-show-toggle="true"
+                   data-show-columns="true"
+                   data-click-to-select="true"
+                   data-pagination="true"
+                   data-toolbar="#toolbar">
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    {% for column in schema_to_view %}
+                        <th data-sortable="true" data-field={{column}}>{{column}}</th>
+                    {% endfor %}
+
+                </tr>
+                </thead>
+            </table>
+
+        </div>
     </div>
-    </div>
 
-<script type=text/javascript>
+    <script type=text/javascript>
 
         var $table = $('#table');
 
@@ -78,21 +83,6 @@
                 data: {{ results|safe }}
             });
         });
-
-        {#        $(function () {#}
-        {#            $table.on('click-row.bs.table', function (e, row, $element) {#}
-        {#                $('.success').removeClass('success');#}
-        {#                $($element).addClass('success');#}
-        {#            });#}
-        {#            $('#button').click(function () {#}
-        {#                alert('Selected name: ' + getSelectedRow().name);#}
-        {#            });#}
-        {#        });#}
-        {##}
-        {#        function getSelectedRow() {#}
-        {#            var index = $table.find('tr.success').data('index');#}
-        {#            return $table.bootstrapTable('getData')[index];#}
-        {#        }#}
 
         var checkedRows = [];
 
@@ -110,31 +100,24 @@
             console.log(checkedRows);
         });
 
-{#        $("#button").click(function() {#}
-{#            $("#output").empty();#}
-{#            $.each(checkedRows, function(index, value) {#}
-{#                $('#output').append($('<li></li>').text(value.username + " | " + value.nome + " | " + value.cognome));#}
-{#            });#}
-{#        });#}
-
-    $(function() {
-        $('button').click(
-            function () {
-            $.ajax({
-                url: '{{ url_for('edit_tuple') }}',
-                data: JSON.stringify(checkedRows),
-                contentType: 'application/json;charset=UTF-8',
-                datatype: 'json',
-                type: 'POST',
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        $(function() {
+            $('button').click(
+                function () {
+                    $.ajax({
+                        url: '{{ url_for('edit_tuple') }}',
+                        data: JSON.stringify($table.bootstrapTable('getAllSelections')),
+                        contentType: 'application/json;charset=UTF-8',
+                        datatype: 'json',
+                        type: 'POST',
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                });
         });
-    });
 
     </script>
 
