@@ -54,3 +54,10 @@ def insert_query(attributes, n, table, cond_values):
     cur = conn.cursor()
     cur.execute("INSERT INTO " + table + " " + attributes + " VALUES " + s, cond_values)
     conn.commit()
+
+
+def delete_query(table, condition, cond_values):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM " + table + " WHERE " + condition, cond_values)
+    conn.commit()
