@@ -65,3 +65,4 @@ class ChangePassword(Form):
                                                      validators.EqualTo('confirm',
                                                                         message='Le passwords devono corrispondere!')])
     confirm = PasswordField('Conferma password')
+

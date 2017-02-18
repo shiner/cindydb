@@ -5,6 +5,7 @@ import hashlib
 from cindydb.forms import *
 from cindydb import app
 from psycopg2 import extras
+import json
 
 
 @app.route('/charts')
@@ -55,11 +56,23 @@ def index():
     #     return redirect(url_for('login'))
 
 
-@app.route('/view-table')
-def view_table():
-    if session.get('logged_in'):
-        schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
+# @app.route('/view-users')
+# def view_users():
+#     if session.get('logged_in'):
+#         schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
+#         data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
+#         return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), data=data)
+#     else:
+#         return redirect(url_for('login'))
+
+@app.route('/view-users')
+def view_users():
+
+        schema_to_view = 'nome, cognome, username,  tel, email, sesso, residenza'
         data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
-        return render_template('/view-table.html', schema_to_view=schema_to_view.split(','), data=data)
-    else:
-        return redirect(url_for('login'))
+        results = []
+        columns = ('nome', 'cognome', 'username', 'tel', 'email', 'sesso', 'residenza')
+        for row in data:
+            results.append(dict(zip(columns, row)))
+        print json.dumps(results, indent=2)
+        return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), results=results)

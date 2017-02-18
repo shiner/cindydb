@@ -26,12 +26,34 @@
     <!-- Custom Fonts -->
     <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <!-- jQuery -->
+    <script src="../static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../static/js/bootstrap.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../static/js/plugins/morris/raphael.min.js"></script>
+    <script src="../static/js/plugins/morris/morris.min.js"></script>
+    <script src="../static/js/plugins/morris/morris-data.js"></script>
+
+    <!-- Flot Charts JavaScript -->
+    <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
+    <script src="../static/js/plugins/flot/jquery.flot.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="../static/js/plugins/flot/flot-data.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- jQuery -->
+{#    <script src="../static/js/jquery.js"></script>#}
 
 </head>
 <body style="margin-top: 31px">
@@ -52,58 +74,58 @@
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
-{#            <li class="dropdown">#}
-{#                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>#}
-{#                <ul class="dropdown-menu message-dropdown">#}
-{#                    <li class="message-preview">#}
-{#                        <a href="#">#}
-{#                            <div class="media">#}
-{#                                    <span class="pull-left">#}
-{#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
-{#                                    </span>#}
-{#                                <div class="media-body">#}
-{#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong></h5>#}
-{#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
-{#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </li>#}
-{#                    <li class="message-preview">#}
-{#                        <a href="#">#}
-{#                            <div class="media">#}
-{#                                    <span class="pull-left">#}
-{#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
-{#                                    </span>#}
-{#                                <div class="media-body">#}
-{#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong>#}
-{#                                    </h5>#}
-{#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
-{#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </li>#}
-{#                    <li class="message-preview">#}
-{#                        <a href="#">#}
-{#                            <div class="media">#}
-{#                                    <span class="pull-left">#}
-{#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
-{#                                    </span>#}
-{#                                <div class="media-body">#}
-{#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong>#}
-{#                                    </h5>#}
-{#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
-{#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                    </li>#}
-{#                    <li class="message-footer">#}
-{#                        <a href="#">Read All New Messages</a>#}
-{#                    </li>#}
-{#                </ul>#}
-{#            </li>#}
+            {#            <li class="dropdown">#}
+            {#                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>#}
+            {#                <ul class="dropdown-menu message-dropdown">#}
+            {#                    <li class="message-preview">#}
+            {#                        <a href="#">#}
+            {#                            <div class="media">#}
+            {#                                    <span class="pull-left">#}
+            {#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
+            {#                                    </span>#}
+            {#                                <div class="media-body">#}
+            {#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong></h5>#}
+            {#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
+            {#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </a>#}
+            {#                    </li>#}
+            {#                    <li class="message-preview">#}
+            {#                        <a href="#">#}
+            {#                            <div class="media">#}
+            {#                                    <span class="pull-left">#}
+            {#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
+            {#                                    </span>#}
+            {#                                <div class="media-body">#}
+            {#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong>#}
+            {#                                    </h5>#}
+            {#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
+            {#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </a>#}
+            {#                    </li>#}
+            {#                    <li class="message-preview">#}
+            {#                        <a href="#">#}
+            {#                            <div class="media">#}
+            {#                                    <span class="pull-left">#}
+            {#                                        <img class="media-object" src="http://placehold.it/50x50" alt="">#}
+            {#                                    </span>#}
+            {#                                <div class="media-body">#}
+            {#                                    <h5 class="media-heading"><strong>{{session['firstname']}} {{session['lastname']}}</strong>#}
+            {#                                    </h5>#}
+            {#                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>#}
+            {#                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>#}
+            {#                                </div>#}
+            {#                            </div>#}
+            {#                        </a>#}
+            {#                    </li>#}
+            {#                    <li class="message-footer">#}
+            {#                        <a href="#">Read All New Messages</a>#}
+            {#                    </li>#}
+            {#                </ul>#}
+            {#            </li>#}
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu alert-dropdown">
@@ -161,23 +183,23 @@
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-table"></i> Tables <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="demo" class="collapse">
                         {{ nav_link('tables', '', ' Tables') }}
-                        {{ nav_link('view_table', '', ' Users') }}
+                        {{ nav_link('view_users', '', ' Users') }}
                         </li>
                     </ul>
                 </li>
-{#                <li>#}
-{#                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>#}
-{#                    <ul id="demo" class="collapse">#}
-{#                        <li>#}
-{#                            <a href="#">Dropdown Item</a>#}
-{#                        </li>#}
-{#                        <li>#}
-{#                            <a href="#">Dropdown Item</a>#}
-{#                        </li>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </li>#}
-{#                {{ nav_link('blank_page', 'fa fa-fw fa-file', ' Blank Page') }}#}
+                {#                <li>#}
+                {#                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>#}
+                {#                    <ul id="demo" class="collapse">#}
+                {#                        <li>#}
+                {#                            <a href="#">Dropdown Item</a>#}
+                {#                        </li>#}
+                {#                        <li>#}
+                {#                            <a href="#">Dropdown Item</a>#}
+                {#                        </li>#}
+                {#                        </li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+                {#                {{ nav_link('blank_page', 'fa fa-fw fa-file', ' Blank Page') }}#}
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -197,7 +219,7 @@
     {% endwith %}
 
     <div id="page-wrapper">
-    {% block banner %}{% endblock %}
+        {% block banner %}{% endblock %}
         <div class="container-fluid">
             {% block content %}{% endblock %}
         </div>
@@ -208,25 +230,6 @@
 
 </div>
 <!-- /#wrapper -->
-
-<!-- jQuery -->
-<script src="../static/js/jquery.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="../static/js/bootstrap.min.js"></script>
-
-<!-- Morris Charts JavaScript -->
-<script src="../static/js/plugins/morris/raphael.min.js"></script>
-<script src="../static/js/plugins/morris/morris.min.js"></script>
-<script src="../static/js/plugins/morris/morris-data.js"></script>
-
-<!-- Flot Charts JavaScript -->
-<!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
-<script src="../static/js/plugins/flot/jquery.flot.js"></script>
-<script src="../static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script src="../static/js/plugins/flot/jquery.flot.resize.js"></script>
-<script src="../static/js/plugins/flot/jquery.flot.pie.js"></script>
-<script src="../static/js/plugins/flot/flot-data.js"></script>
 
 </body>
 

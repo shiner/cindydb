@@ -36,12 +36,13 @@
                             <th style="text-align: center">{{column}}</th>
                         {% endfor %}
 
-                    </tr>
+                    </tr><a href="{{ url_for('editprofile') }}" title="Edit profile" data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-edit"></i></a>
+<a title="Remove this user" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+
                     </thead>
 
                     <tbody>
                     {% for tuple in data %}
-
                         <tr>
                             {% for attribute in tuple %}
                                 {% if attribute is not none and attribute%}
@@ -49,10 +50,18 @@
                                 {% else %}
                                     <td style="text-align: center">-</td>
                                 {% endif %}
+
                             {% endfor %}
+
+
                         </tr>
 
+
                     {% endfor %}
+
+                    <script>
+                                $('[data-toggle="tooltip"]').tooltip();
+                            </script>
                     </tbody>
                 </table>
             </div>
