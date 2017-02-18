@@ -68,11 +68,12 @@ def index():
 @app.route('/view-users')
 def view_users():
 
-        schema_to_view = 'nome, cognome, username,  tel, email, sesso, residenza'
+        schema_to_view = 'nome, cognome, username, tel, email, sesso, residenza'
         data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
         results = []
         columns = ('nome', 'cognome', 'username', 'tel', 'email', 'sesso', 'residenza')
         for row in data:
             results.append(dict(zip(columns, row)))
-        print json.dumps(results, indent=2)
-        return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), results=results)
+        res = json.dumps(results, indent=2)
+        print res
+        return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), results=res)

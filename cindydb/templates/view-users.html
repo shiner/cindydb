@@ -16,7 +16,7 @@
 {% block content %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
-    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
 
     <!-- Page Heading -->
@@ -46,14 +46,15 @@
                    data-search="true"
                    data-show-refresh="true"
                    data-show-toggle="true"
-{#                   data-show-columns="true"#}
+                   data-show-columns="true"
                    data-click-to-select="true">
                 <thead>
                 <tr>
-                    <th data-field="name">Name</th>
-                    <th data-field="stargazers_count">Stars</th>
-                    <th data-field="forks_count">Forks</th>
-                    <th data-field="description">Description</th>
+                    <th data-field="state" data-checkbox="true"></th>
+                    {% for column in schema_to_view %}
+                        <th data-field={{column}}>{{column}}</th>
+                    {% endfor %}
+
                 </tr>
                 </thead>
             </table>
@@ -63,39 +64,9 @@
     <script type=text/javascript>
 
         var $table = $('#table');
-        var mydata =
-            [
-                {
-                    "name": "bootstrap-table",
-                    "stargazers_count": "526",
-                    "forks_count": "122",
-                    "description": "An extended Bootstrap table with radio, checkbox, sort, pagination, and other added features. (supports twitter bootstrap v2 and v3) "
-                },
-                {
-                    "name": "multiple-select",
-                    "stargazers_count": "288",
-                    "forks_count": "150",
-                    "description": "A jQuery plugin to select multiple elements with checkboxes :)"
-                },
-                {
-                    "name": "bootstrap-show-password",
-                    "stargazers_count": "32",
-                    "forks_count": "11",
-                    "description": "Show/hide password plugin for twitter bootstrap."
-                },
-                {
-                    "name": "blog",
-                    "stargazers_count": "13",
-                    "forks_count": "4",
-                    "description": "my blog"
-                },
-                {
-                    "name": "scutech-redmine",
-                    "stargazers_count": "6",
-                    "forks_count": "3",
-                    "description": "Redmine notification tools for chrome extension."
-                }
-            ];
+
+        var mydata = $('#my-data').data();
+        var mydata = {{ results|safe }};
 
         $(function () {
             $('#table').bootstrapTable({
