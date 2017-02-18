@@ -65,15 +65,33 @@ def index():
 #     else:
 #         return redirect(url_for('login'))
 
+
+import datetime
+
+
+def myconverter(o):
+    if isinstance(o, datetime.date):
+        return o.__str__()
+
+
 @app.route('/view-users')
 def view_users():
 
-        schema_to_view = 'nome, cognome, username, tel, email, sesso, residenza'
+        schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
         data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
         results = []
-        columns = ('nome', 'cognome', 'username', 'tel', 'email', 'sesso', 'residenza')
+        columns = ('nome', 'cognome', 'username', 'data_nascita', 'tel', 'email', 'sesso', 'residenza')
+
         for row in data:
             results.append(dict(zip(columns, row)))
-        res = json.dumps(results, indent=2)
-        print res
+        res = json.dumps(results, default=myconverter)
+        # print res
         return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/edit-tuple', methods=['POST'])
+def edit_tuple():
+    for tuple in request.get_json():
+        print tuple['username']
+    return redirect(url_for('view_users'))
+
