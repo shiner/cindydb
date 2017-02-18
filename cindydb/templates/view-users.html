@@ -42,9 +42,9 @@
             <h2>Users table</h2>
 
             <div id="toolbar" >
-                <button id="button" type="button" class="btn btn-danger" style="margin-right: 20px">
+                <button id="delete" type="button" class="btn btn-danger" style="margin-right: 20px">
                     <i class="glyphicon glyphicon-remove"></i> Cancella</button>
-                <button id="button" type="button" class="btn btn-info">
+                <button id="edit" type="button" class="btn btn-info" disabled>
                     <i class="glyphicon glyphicon-pencil"></i> Modifica</button>
 
             </div>
@@ -89,19 +89,27 @@
         $('#table').on('check.bs.table', function (e, row) {
             checkedRows.push({username: row.username, nome: row.nome, cognome: row.cognome});
             console.log(checkedRows);
+            if(checkedRows.length === 1)
+                $('#edit').prop("disabled",false);
+            else
+                $('#edit').prop("disabled",true);
         });
 
         $('#table').on('uncheck.bs.table', function (e, row) {
             $.each(checkedRows, function(index, value) {
-                if (value.id === row.id) {
+                if (value.username === row.username) {
                     checkedRows.splice(index,1);
                 }
             });
             console.log(checkedRows);
+            if(checkedRows.length === 1)
+                $('#edit').prop("disabled",false);
+            else
+                $('#edit').prop("disabled",true);
         });
 
         $(function() {
-            $('button').click(
+            $('#delete').click(
                 function () {
                     $.ajax({
                         url: '{{ url_for('edit_tuple') }}',
