@@ -53,13 +53,11 @@
                                         <div class="form-group">
 
                                             <div class="form-group">
-
                                                 <label for="{{ form.username.id }}">
                                                     {{ form.username.label.text }}
                                                 </label>
                                                 {{ form.username(readonly="readonly", class='form-control') }}
-
-                                            {{ render_bootstrap_field(form.username,with_label='True', class='form-control') }}
+                                            </div>
                                             {{ render_bootstrap_field(form.firstname_edited,with_label='True', class='form-control') }}
                                             {{ render_bootstrap_field(form.lastname_edited,with_label='True',class='form-control') }}
                                             {{ render_bootstrap_field(form.phonenumber_edited,with_label='True', class='form-control') }}

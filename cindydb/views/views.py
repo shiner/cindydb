@@ -99,12 +99,12 @@ def delete_tuple():
 
 @app.route('/edit-tuple', methods=['POST', 'GET'])
 def edit_tuple():
-        new_form = Edit(request.form)
+        new_form = EditTuple(request.form)
         if new_form.validate():
             attributes_to_update = '(nome, cognome, tel, data_nascita, email, residenza, sesso)'
             cond_values = (new_form.firstname_edited.data, new_form.lastname_edited.data,
                            new_form.phonenumber_edited.data, new_form.dob_edited.data, new_form.email_edited.data,
-                           new_form.city_edited.data, new_form.gender_edited.data, session.get('username'))
+                           new_form.city_edited.data, new_form.gender_edited.data, new_form.username.data)
             cindydb.database.update_query(attributes_to_update, 7, 'utenti', 'username = %s', cond_values)
             return redirect(url_for('view_users'))
         else:
