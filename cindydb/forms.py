@@ -66,3 +66,23 @@ class ChangePassword(Form):
                                                                         message='Le passwords devono corrispondere!')])
     confirm = PasswordField('Conferma password')
 
+
+class EditTuple(Form):
+    username = StringField('Username')
+    firstname_edited = StringField('Nome', validators=[validators.DataRequired('Inserisci il tuo nome')])
+
+    lastname_edited = StringField('Cognome', validators=[validators.DataRequired('Inserisci il tuo cognome')])
+
+    phonenumber_edited = StringField('Numero di telefono')
+
+    dob_edited = DateField('Data di nascita', validators=[validators.Optional()])
+
+    gender_edited = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'),
+                                                           ('donna', 'Donna')],
+                         validators=[validators.Optional()])
+
+    city_edited = StringField('Residenza', validators=[validators.Optional()])
+
+    email_edited = StringField('Indirizzo Email', validators=[validators.Optional(),
+                                                       validators.Length(message='Email non valida', min=6, max=35),
+                                                       validators.Email('Inserisci il tuo indirizzo email')])
