@@ -72,7 +72,7 @@ def profile():
                                              (session.get('username'), session.get('psw')))
         attr = [attribute for attribute in data[0]]
         schema_to_view = ['Nome', 'Cognome', 'Data di nascita', 'Telefono', 'Email', 'Sesso', 'Residenza', 'Username']
-        return render_template('/profile.html', data=zip(schema_to_view, attr), attr=[5])
+        return render_template('/profile.html', data=zip(schema_to_view, attr), gender=attr[5])
     else:
         return redirect(url_for('login'))
 

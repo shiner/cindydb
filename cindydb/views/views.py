@@ -94,4 +94,4 @@ def view_users():
 def delete_tuple():
     for tuple in request.get_json():
         cindydb.database.delete_query('utenti', 'username = %s', (tuple['username'],))
-
+        return redirect(url_for('view_users'))
