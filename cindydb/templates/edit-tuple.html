@@ -31,62 +31,57 @@
         </div>
     </div>
     <!-- /.row -->
-
     <div class="row">
         <div class="col-lg-12">
             <h2>Utenti</h2>
         </div>
     </div>
     <div class="row" style="padding-top: 20pt">
-     <div class="container">
+        <div class="container">
             <div class="col-lg-6" style="padding: 0pt">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <form action="{{ url_for('edit_tuple') }}" method=post>
-                                    <fieldset>
-                                        <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="{{ url_for('edit_tuple') }}" method=post>
+                            <fieldset>
+                                <div class="form-group">
 
-                                            <div class="form-group">
-                                                <label for="{{ form.username.id }}">
-                                                    {{ form.username.label.text }}
-                                                </label>
-                                                {{ form.username(readonly="readonly", class='form-control') }}
+                                    <div class="form-group">
+                                        <label for="{{ form.username.id }}">
+                                            {{ form.username.label.text }}
+                                        </label>
+                                        {{ form.username(readonly="readonly", class='form-control') }}
+                                    </div>
+                                    {{ render_bootstrap_field(form.firstname_edited,with_label='True', class='form-control') }}
+                                    {{ render_bootstrap_field(form.lastname_edited,with_label='True',class='form-control') }}
+                                    {{ render_bootstrap_field(form.phonenumber_edited,with_label='True', class='form-control') }}
+                                    {{ render_bootstrap_field(form.dob_edited,with_label='True',placeholder='%Y-%m-%d',class='form-control') }}
+                                    {{ render_bootstrap_field(form.city_edited,with_label='True' ,class='form-control') }}
+                                    {{ render_bootstrap_field(form.gender_edited,with_label='True', class='radio' ) }}
+                                    {{ render_bootstrap_field(form.email_edited,with_label='True',class='form-control') }}
+                                </div>
+
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                                    {% if messages %}
+                                        {% for category, message in messages %}
+                                            <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="text-align: center; margin: 0;">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span></button>
+                                                <!-- <strong>Title</strong> --> {{ message }}
                                             </div>
-                                            {{ render_bootstrap_field(form.firstname_edited,with_label='True', class='form-control') }}
-                                            {{ render_bootstrap_field(form.lastname_edited,with_label='True',class='form-control') }}
-                                            {{ render_bootstrap_field(form.phonenumber_edited,with_label='True', class='form-control') }}
-                                            {{ render_bootstrap_field(form.dob_edited,with_label='True',placeholder='%Y-%m-%d',class='form-control') }}
-                                            {{ render_bootstrap_field(form.city_edited,with_label='True' ,class='form-control') }}
-                                            {{ render_bootstrap_field(form.gender_edited,with_label='True', class='radio' ) }}
-                                            {{ render_bootstrap_field(form.email_edited,with_label='True',class='form-control') }}
-                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
 
-                                        {% with messages = get_flashed_messages(with_categories=true) %}
-                                            <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
-                                            {% if messages %}
-                                                {% for category, message in messages %}
-                                                    <div class="alert alert-{{ category }} alert-dismissible" role="alert" style="text-align: center; margin: 0;">
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span></button>
-                                                        <!-- <strong>Title</strong> --> {{ message }}
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endwith %}
-
-                                    </fieldset>
-                                    <div class="col-lg-12 text-center">
-                                        <div class="form-group" style="padding-top: 15px;">
-                                            <input class="btn btn-success" type="submit" name="submit_reg" value="Salva modifiche">
-                                        </div></div>
-                                </form>
-                            </div>
-                        </div>
+                            </fieldset>
+                            <div class="col-lg-12 text-center">
+                                <div class="form-group" style="padding-top: 15px;">
+                                    <input class="btn btn-success" type="submit" name="submit_reg" value="Salva modifiche">
+                                </div></div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 {% endblock %}
