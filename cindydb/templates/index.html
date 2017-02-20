@@ -199,7 +199,10 @@
                 {#                        </li>#}
                 {#                    </ul>#}
                 {#                </li>#}
-                {#                {{ nav_link('blank_page', 'fa fa-fw fa-file', ' Blank Page') }}#}
+
+                {%  if session['username'] == 'admin' %}
+                {{ nav_link('dw', 'fa fa-line-chart', ' Analysis') }}
+                {% endif %}
             </ul>
         </div>
         <!-- /.navbar-collapse -->

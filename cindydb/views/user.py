@@ -31,13 +31,13 @@ def register():
                            form.city.data, form.gender.data)
             cindydb.database.insert_query(attributes, 9, 'utenti', cond_values)
 
-            flash('Grazie per esserti registrato', category='success')
+            # flash('Grazie per esserti registrato', category='success')
             session['logged_in'] = True
             session['username'] = form.username.data
             session['firstname'] = form.firstname.data
             session['lastname'] = form.lastname.data
             session['psw'] = hashlib.sha1(form.password.data).hexdigest()
-            return redirect(url_for('index'))
+            return redirect(url_for('login'))
         else:
             flash('Username esistente', category='error')
 

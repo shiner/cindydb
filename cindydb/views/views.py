@@ -99,7 +99,7 @@ def delete_tuple():
 
 @app.route('/datawarehouse')
 def dw():
-    # if session.get('logged_in'):
+    if session.get('logged_in') and session.get('username') == 'admin':
         return render_template('datawarehouse.html')
-    # else:
-    #     return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
