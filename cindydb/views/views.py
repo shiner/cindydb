@@ -95,3 +95,11 @@ def delete_tuple():
     for tuple in request.get_json():
         cindydb.database.delete_query('utenti', 'username = %s', (tuple['username'],))
         return redirect(url_for('view_users'))
+
+
+@app.route('/datawarehouse')
+def dw():
+    # if session.get('logged_in'):
+        return render_template('datawarehouse.html')
+    # else:
+    #     return redirect(url_for('login'))
