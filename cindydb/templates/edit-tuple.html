@@ -46,17 +46,22 @@
 
                                     <div class="form-group">
                                         <label for="{{ form.username.id }}">
+                                            {{ form.cf.label.text }}
+                                        </label>
+                                        {{ form.cf(readonly="readonly", class='form-control') }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form.username.id }}">
                                             {{ form.username.label.text }}
                                         </label>
                                         {{ form.username(readonly="readonly", class='form-control') }}
                                     </div>
                                     {{ render_bootstrap_field(form.firstname_edited,with_label='True', class='form-control') }}
                                     {{ render_bootstrap_field(form.lastname_edited,with_label='True',class='form-control') }}
-                                    {{ render_bootstrap_field(form.phonenumber_edited,with_label='True', class='form-control') }}
+                                    {{ render_bootstrap_field(form.number_edited,with_label='True', class='form-control') }}
                                     {{ render_bootstrap_field(form.dob_edited,with_label='True',placeholder='%Y-%m-%d',class='form-control') }}
-                                    {{ render_bootstrap_field(form.city_edited,with_label='True' ,class='form-control') }}
                                     {{ render_bootstrap_field(form.gender_edited,with_label='True', class='radio' ) }}
-                                    {{ render_bootstrap_field(form.email_edited,with_label='True',class='form-control') }}
+                                    {{ render_bootstrap_field(form.type_edited,with_label='True',class='radio') }}
                                 </div>
 
                                 {% with messages = get_flashed_messages(with_categories=true) %}

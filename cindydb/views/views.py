@@ -61,11 +61,11 @@ def index():
 def edit_tuple():
         new_form = EditTuple(request.form)
         if new_form.validate():
-            attributes_to_update = '(nome, cognome, tel, data_nascita, email, residenza, sesso)'
+            attributes_to_update = '(nome, cognome, data_nascita, tipo, numero_patente, sesso)'
             cond_values = (new_form.firstname_edited.data, new_form.lastname_edited.data,
-                           new_form.phonenumber_edited.data, new_form.dob_edited.data, new_form.email_edited.data,
-                           new_form.city_edited.data, new_form.gender_edited.data, new_form.username.data)
-            cindydb.database.update_query(attributes_to_update, 7, 'utenti', 'username = %s', cond_values)
+                           new_form.dob_edited.data, new_form.type_edited.data, new_form.number_edited.data,
+                           new_form.gender_edited.data, new_form.cf.data,)
+            cindydb.database.update_query(attributes_to_update, 6, 'utenti', 'cf = %s', cond_values)
             return redirect(url_for('view_users'))
         else:
             return render_template('/edit-tuple.html', form=new_form)
@@ -79,10 +79,10 @@ def view_users():
         old_form = cindydb.utility.get_tuple(old_form, key)
         return render_template('/edit-tuple.html', form=old_form)
     else:
-        schema_to_view = 'nome, cognome, username, data_nascita, tel, email, sesso, residenza'
+        schema_to_view = 'nome, cognome, cf, data_nascita, tipo, numero_patente, sesso, username'
         data = cindydb.database.select_query(schema_to_view, 'utenti', None, None)
         results = []
-        columns = ('nome', 'cognome', 'username', 'data_nascita', 'tel', 'email', 'sesso', 'residenza')
+        columns = ('nome', 'cognome', 'cf', 'data_nascita', 'tipo', 'numero_patente', 'sesso', 'username')
 
         for row in data:
             results.append(dict(zip(columns, row)))
@@ -93,13 +93,13 @@ def view_users():
 @app.route('/delete-tuple', methods=['POST'])
 def delete_tuple():
     for tuple in request.get_json():
-        cindydb.database.delete_query('utenti', 'username = %s', (tuple['username'],))
+        cindydb.database.delete_query('utenti', 'cf = %s', (tuple['cf'],))
         return redirect(url_for('view_users'))
 
 
 @app.route('/datawarehouse')
 def dw():
-    if session.get('logged_in') and session.get('username') == 'admin':
+    if session.get('logged_in') and session.get('cf') == 'admin':
         return render_template('datawarehouse.html')
     else:
         return redirect(url_for('login'))

@@ -20,15 +20,15 @@ def get_profile(edit_form, cf):
 
 
 def get_tuple(edit_tuple_form, key):
-    schema_to_view = 'nome, cognome, data_nascita, tel, email, sesso, residenza'
-    res = cindydb.database.select_query(schema_to_view, 'utenti', 'username = %s', (key,))
-    edit_tuple_form.username.data = key
-    edit_tuple_form.firstname_edited.data = res[0][0]
-    edit_tuple_form.lastname_edited.data = res[0][1]
-    edit_tuple_form.phonenumber_edited.data = res[0][3]
-    edit_tuple_form.dob_edited.data = res[0][2]
-    edit_tuple_form.gender_edited.data = res[0][5]
-    edit_tuple_form.city_edited.data = res[0][6]
-    edit_tuple_form.email_edited.data = res[0][4]
+    schema_to_view = 'username, nome, cognome, data_nascita, tipo, numero_patente, sesso'
+    res = cindydb.database.select_query(schema_to_view, 'utenti', 'cf = %s', (key,))
+    edit_tuple_form.cf.data = key
+    edit_tuple_form.username.data = res[0][0]
+    edit_tuple_form.firstname_edited.data = res[0][1]
+    edit_tuple_form.lastname_edited.data = res[0][2]
+    edit_tuple_form.dob_edited.data = res[0][3]
+    edit_tuple_form.type_edited.data = res[0][4]
+    edit_tuple_form.number_edited.data = res[0][5]
+    edit_tuple_form.gender_edited.data = res[0][6]
     return edit_tuple_form
 

@@ -44,7 +44,7 @@ def update_query(attributes, n, table, condition, cond_values):
     s = '(' + '%s, ' * (n - 1) + '%s )'
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("UPDATE " + table + " SET " + attributes + " = " + s + "WHERE " + condition, cond_values)
+    cur.execute("UPDATE " + table + " SET " + attributes + " = " + s + " WHERE " + condition, cond_values)
     conn.commit()
 
 

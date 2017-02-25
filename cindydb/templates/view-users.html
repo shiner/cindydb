@@ -86,7 +86,7 @@
         var checkedRows = [];
 
         $('#table').on('check.bs.table', function (e, row) {
-            checkedRows.push(row.username);
+            checkedRows.push(row.cf);
             console.log(checkedRows);
             if(checkedRows.length === 1)
                 $('#edit').prop("disabled",false);
@@ -96,9 +96,9 @@
 
         $('#table').on('uncheck.bs.table', function (e, row) {
             $.each(checkedRows, function(value) {
-                if (checkedRows.includes(row.username)) {
-                    console.log(row.username);
-                    var index = checkedRows.indexOf(row.username);
+                if (checkedRows.includes(row.cf)) {
+                    console.log(row.cf);
+                    var index = checkedRows.indexOf(row.cf);
                     checkedRows.splice(index, 1);
                 }
             });
