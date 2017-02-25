@@ -61,11 +61,10 @@
                                         <div class="form-group">
                                             {{ render_bootstrap_field(form.firstname_edited,with_label='True', class='form-control') }}
                                             {{ render_bootstrap_field(form.lastname_edited,with_label='True',class='form-control') }}
-                                            {{ render_bootstrap_field(form.phonenumber_edited,with_label='True', class='form-control') }}
+                                            {{ render_bootstrap_field(form.number_edited,with_label='True', class='form-control') }}
                                             {{ render_bootstrap_field(form.dob_edited,with_label='True',placeholder='%Y-%m-%d',class='form-control') }}
-                                            {{ render_bootstrap_field(form.city_edited,with_label='True' ,class='form-control') }}
+                                            {{ render_bootstrap_field(form.type_edited,with_label='True' ,class='radio') }}
                                             {{ render_bootstrap_field(form.gender_edited,with_label='True', class='radio' ) }}
-                                            {{ render_bootstrap_field(form.email_edited,with_label='True',class='form-control') }}
                                         </div>
 
                                         {% with messages = get_flashed_messages(with_categories=true) %}

@@ -10,7 +10,7 @@ class Registration(Form):
 
     cf = StringField('Codice fiscale', validators=[validators.DataRequired('Inserisci il tuo codice fiscale')])
 
-    dob = DateField('Data di nascita', validators=[validators.DataRequired('Inserisci la tua data di nascita')])
+    dob = DateField('Data di nascita', validators=[validators.DataRequired('Inserisci la tua data di nascita [%Y-%m-%d]')])
 
     gender = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'), ('donna', 'Donna')],
                         validators=[validators.Optional()])
@@ -38,19 +38,17 @@ class Edit(Form):
 
     lastname_edited = StringField('Cognome', validators=[validators.DataRequired('Inserisci il tuo cognome')])
 
-    phonenumber_edited = StringField('Numero di telefono')
+    number_edited = StringField('Numero di patente', validators=[validators.DataRequired('Inserisci il tuo numero di patente')])
 
     dob_edited = DateField('Data di nascita', validators=[validators.Optional()])
 
     gender_edited = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'),
                                                            ('donna', 'Donna')],
-                         validators=[validators.Optional()])
+                               validators=[validators.Optional()])
 
-    city_edited = StringField('Residenza', validators=[validators.Optional()])
+    type_edited = RadioField('Tipo di utente', default='ua', choices=[('up', 'Utente premium'),
+                                                               ('ua', 'Utente abbonato')])
 
-    email_edited = StringField('Indirizzo Email', validators=[validators.Optional(),
-                                                       validators.Length(message='Email non valida', min=6, max=35),
-                                                       validators.Email('Inserisci il tuo indirizzo email')])
 
 
 class Login(Form):

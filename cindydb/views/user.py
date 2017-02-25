@@ -89,15 +89,15 @@ def profile():
 def editprofile():
     if session.get('logged_in'):
         old_form = Edit(request.form)
-        old_form = cindydb.utility.get_profile(old_form, (session.get('username'),))
+        old_form = cindydb.utility.get_profile(old_form, (session.get('cf'),))
         if request.method == 'POST':
             new_form = Edit(request.form)
             if new_form.validate():
-                attributes_to_update = '(nome, cognome, tel, data_nascita, email, residenza, sesso)'
+                attributes_to_update = 'nome, cognome, data_nascita, tipo, numero_patente, sesso'
                 cond_values = (new_form.firstname_edited.data, new_form.lastname_edited.data,
-                               new_form.phonenumber_edited.data, new_form.dob_edited.data, new_form.email_edited.data,
-                               new_form.city_edited.data, new_form.gender_edited.data, session.get('username'))
-                cindydb.database.update_query(attributes_to_update, 7, 'utenti', 'username = %s', cond_values)
+                               new_form.dob_edited.data, new_form.type_edited.data, new_form.number_edited.data,
+                               new_form.gender_edited.data, session.get('cf'))
+                cindydb.database.update_query(attributes_to_update, 7, 'utenti', 'cf = %s', cond_values)
                 flash('Profilo aggiornato', category='success')
                 session['firstname'] = new_form.firstname_edited.data
                 session['lastname'] = new_form.lastname_edited.data
