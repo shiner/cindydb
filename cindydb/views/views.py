@@ -92,26 +92,9 @@ def view_users():
 
 @app.route('/delete-tuple', methods=['POST'])
 def delete_tuple():
-    try:
-        for tuple in request.get_json():
-            msg = cindydb.database.delete_query('utenti', 'cf = %s', (tuple['cf'],))
-            # if msg:
-            #     # flash('Integrity error: La tupla non puo\' essere eliminata', category='success')
-            #     return redirect(url_for('index'))
-            # else:
-            #     return redirect(url_for('view_users'))
-    except ValueError as e:
-        print e
-
-    # for tuple in request.get_json():
-        # msg = cindydb.database.delete_query('utenti', 'cf = %s', (tuple['cf'],))
-        # if msg:
-        #     # flash('Integrity error: La tupla non puo\' essere eliminata', category='success')
-        #     return redirect(url_for('index'))
-        # else:
-        #     return redirect(url_for('view_users'))
-    finally:
-        return redirect(url_for('index'))
+    for tuple in request.get_json():
+        cindydb.database.delete_query('utenti', 'cf = %s', (tuple['cf'],))
+        return redirect(url_for('view_users'))
 
 
 @app.route('/datawarehouse')
