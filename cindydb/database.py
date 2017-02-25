@@ -2,7 +2,7 @@ import psycopg2
 from flask import g
 from cindydb import app
 
-conn_string = "host='localhost' dbname='db_project' user='postgres' password='frrnrt'"
+conn_string = "host='localhost' dbname='db_parking' user='postgres' password='frrnrt'"
 
 
 def connect_db():

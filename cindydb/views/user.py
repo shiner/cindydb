@@ -23,12 +23,13 @@ def logout():
 def register():
     form = Registration(request.form)
     if request.method == 'POST' and form.validate():
-        data = cindydb.database.select_query('*', 'utenti', 'username = %s', (form.username.data, ))
+        data = cindydb.database.select_query('*', 'utenti', 'cf = %s OR username = %s',
+                                             (form.cf.data, form.username.data,))
         if len(data) == 0:
-            attributes = '(username, psw, nome, cognome, tel, data_nascita, email, residenza, sesso)'
-            cond_values = (form.username.data, hashlib.sha1(form.password.data).hexdigest(), form.firstname.data,
-                           form.lastname.data, form.phonenumber.data, form.dob.data, form.email.data,
-                           form.city.data, form.gender.data)
+            attributes = '(cf, nome, cognome, data_nascita, tipo, numero_patente, sesso, username, psw)'
+            cond_values = (form.cf.data, form.firstname.data, form.lastname.data, form.dob.data, form.type.data,
+                           form.number.data, form.gender.data, form.username.data,
+                           hashlib.sha1(form.password.data).hexdigest(),)
             cindydb.database.insert_query(attributes, 9, 'utenti', cond_values)
 
             # flash('Grazie per esserti registrato', category='success')
@@ -37,9 +38,10 @@ def register():
             session['firstname'] = form.firstname.data
             session['lastname'] = form.lastname.data
             session['psw'] = hashlib.sha1(form.password.data).hexdigest()
+            session['cf'] = form.cf.data
             return redirect(url_for('login'))
         else:
-            flash('Username esistente', category='error')
+            flash('Username gia\' utilizzata!', category='error')
 
     return render_template('register.html', lform=Login(), form=form)
 
@@ -48,7 +50,7 @@ def register():
 def login():
     l_form = Login(request.form)
     if request.method == 'POST' and l_form.validate():
-        data = cindydb.database.select_query('nome, cognome', 'utenti', 'username = %s AND psw = %s',
+        data = cindydb.database.select_query('cf, nome, cognome', 'utenti', 'username = %s AND psw = %s',
                                              (l_form.login_user.data, hashlib.sha1(l_form.login_pass.data).hexdigest()))
         if len(data) == 0:
             flash('Username o password invalida. Prova ancora!', category='error')
@@ -56,8 +58,9 @@ def login():
             flash('Login eseguito', category='success')
             session['logged_in'] = True
             session['username'] = l_form.login_user.data
-            session['firstname'] = data[0][0]
-            session['lastname'] = data[0][1]
+            session['cf'] = data[0][0]
+            session['firstname'] = data[0][1]
+            session['lastname'] = data[0][2]
             session['psw'] = hashlib.sha1(l_form.login_pass.data).hexdigest()
             return redirect(url_for('index'))
 

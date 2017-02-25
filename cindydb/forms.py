@@ -6,23 +6,25 @@ class Registration(Form):
 
     lastname = StringField('Cognome', validators=[validators.DataRequired('Inserisci il tuo cognome')])
 
-    phonenumber = StringField('Numero di telefono')
+    number = StringField('Numero di patente', validators=[validators.DataRequired('Inserisci il tuo numero di patente')])
 
-    dob = DateField('Data di nascita', validators=[validators.Optional()])
+    cf = StringField('Codice fiscale', validators=[validators.DataRequired('Inserisci il tuo codice fiscale')])
 
-    gender = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'),
-                                                           ('donna', 'Donna')],
-                         validators=[validators.Optional()])
+    dob = DateField('Data di nascita', validators=[validators.DataRequired('Inserisci la tua data di nascita')])
 
-    city = StringField('Residenza', validators=[validators.Optional()])
+    gender = RadioField('Sesso', default='uomo', choices=[('uomo', 'Uomo'), ('donna', 'Donna')],
+                        validators=[validators.Optional()])
+
+    type = RadioField('Tipo di utente', default='ua', choices=[('up', 'Utente premium'),
+                                                               ('ua', 'Utente abbonato')])
 
     username = StringField('Username', validators=[validators.DataRequired('Inserisci il tuo username'),
                                                    validators.Length(message='Username non valido: lunghezza minima 4.',
                                                                      min=4, max=25)])
 
-    email = StringField('Indirizzo Email', validators=[validators.Optional(),
-                                                       validators.Length(message='Email non valida', min=6, max=35),
-                                                       validators.Email('Inserisci il tuo indirizzo email')])
+    # email = StringField('Indirizzo Email', validators=[validators.Optional(),
+    #                                                    validators.Length(message='Email non valida', min=6, max=35),
+    #                                                    validators.Email('Inserisci il tuo indirizzo email')])
 
     password = PasswordField('Password', validators=[validators.DataRequired('Password obbligatoria'),
                                                      validators.Length(message='Password troppo corta: lunghezza minima 4.',
