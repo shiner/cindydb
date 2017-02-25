@@ -5,7 +5,6 @@
     {% block page %}Tables{% endblock %}
 {% endblock %}
 
-
 {% block dropdown %}
     <script src="../static/js/jquery.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
@@ -71,7 +70,6 @@
                 </tr>
                 </thead>
             </table>
-
         </div>
     </div>
 
@@ -139,11 +137,11 @@
                     console.log(row.username);
                     return row.username;
                 });
-                checkedRows = [];
-                $('#table').bootstrapTable('remove', {
-                    field: 'username',
-                    values: ids
-                });
+{#                checkedRows = [];#}
+{#                $('#table').bootstrapTable('remove', {#}
+{#                    field: 'username',#}
+{#                    values: ids#}
+{#                });#}
             });
         });
     </script>
