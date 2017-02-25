@@ -70,12 +70,17 @@ def login():
 @app.route('/profile')
 def profile():
     if session.get('logged_in'):
-        attributes = 'nome, cognome, data_nascita, tel, email, sesso, residenza, username'
-        data = cindydb.database.select_query(attributes, 'utenti', 'username = %s AND psw = %s',
-                                             (session.get('username'), session.get('psw')))
+        attributes = 'nome, cognome, cf, data_nascita, tipo, numero_patente, sesso, username, psw'
+        data = cindydb.database.select_query(attributes, 'utenti', 'cf = %s',
+                                             (session.get('cf'),))
         attr = [attribute for attribute in data[0]]
-        schema_to_view = ['Nome', 'Cognome', 'Data di nascita', 'Telefono', 'Email', 'Sesso', 'Residenza', 'Username']
-        return render_template('/profile.html', data=zip(schema_to_view, attr), gender=attr[5])
+        attr[2] = attr[2].upper()
+        if attr[4] == 'up':
+            attr[4] = 'Utente premium'
+        else:
+            attr[4] = 'Utente abbonato'
+        schema_to_view = ['Nome', 'Cognome', 'Codice fiscale', 'Data di nascita', 'Tipo', 'Numero di patente', 'Sesso', 'Username']
+        return render_template('/profile.html', data=zip(schema_to_view, attr), gender=attr[6])
     else:
         return redirect(url_for('login'))
 

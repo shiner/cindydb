@@ -78,11 +78,7 @@
                                             {% for attr, field in data %}
                                                 <td>{{attr}}</td>
                                                 {% if field is not none and field%}
-                                                    {% if attr == 'Email'%}
-                                                        <td><a href="{{field}}">{{field}}</a></td>
-                                                    {% else %}
                                                         <td>{{field}}</td>
-                                                    {% endif %}
                                                 {% else %}
                                                     <td>-</td>
                                                 {% endif %}
