@@ -38,19 +38,25 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h2>Parcheggi liberi</h2>
+            <h2>PL</h2>
 
             <div class="row">
                 <div id="toolbar" >
-                    <form id="send" method="post" action="{{ url_for('view_pl') }}" onsubmit="getJSON()" enctype='application/json'>
-                        <button id="delete" type="button" class="btn btn-danger" style="margin-right: 20px">
-                            <i class="glyphicon glyphicon-remove"></i> Cancella</button>
-                        <button id="edit" type="submit" class="btn btn-info" disabled style="margin-right: 20px">
-                            <i class="glyphicon glyphicon-pencil"></i> Modifica</button>
-                        <button id="insert" type="submit" class="btn btn-success">
-                            <i class="glyphicon glyphicon-plus"></i> Inserisci</button>
-                        <input type="hidden" name="jsonval" value=""/>
-                    </form>
+                    <span style="float:left;">
+                        <form id="send" method="post" action="{{ url_for('view_pl') }}" onsubmit="getJSON()" enctype='application/json'>
+                            <button id="delete" type="button" class="btn btn-danger" style="margin-right: 20px">
+                                <i class="glyphicon glyphicon-remove"></i> Cancella</button>
+                            <button id="edit" type="submit" class="btn btn-info" disabled style="margin-right: 20px">
+                                <i class="glyphicon glyphicon-pencil"></i> Modifica</button>
+                            <input type="hidden" name="jsonval" value=""/>
+                         </form>
+                    </span>
+                    <span style="float:left;">
+                        <form id="insert" action="{{ url_for('new_pl') }}">
+                            <button id="insert" type="submit" class="btn btn-success">
+                                <i class="glyphicon glyphicon-plus"></i> Inserisci</button>
+                       </form>
+                    </span>
                 </div>
             </div>
 

@@ -3,7 +3,7 @@
 
 {% block heading %}
     {{ super() }}
-    {% block page %}Edit PL{% endblock %}
+    {% block page %}New PL{% endblock %}
 {% endblock %}
 
 {#{% block dropdown %}#}
@@ -27,7 +27,7 @@
                     <a href="{{ url_for('view_pl') }}">View PL</a>
                 </li>
                 <li class="active">
-                    Edit PL
+                    New PL
                 </li>
             </ol>
         </div>
@@ -44,15 +44,18 @@
             <div class="col-lg-6" style="padding: 0pt">
                 <div class="row">
                     <div class="col-lg-12">
-                        <form action="{{ url_for('edit_pl') }}" method=post>
+                        <form action="{{ url_for('new_pl') }}" method=post>
+
                             <fieldset>
                                 <div class="form-group">
-                                        <div class="form-group">
-                                            <label for="{{ form.name.id }}">
-                                                {{ form.name.label.text }}
-                                            </label>
-                                            {{ form.name(readonly="readonly", class='form-control') }}
-                                        </div>
+                                    {{ render_bootstrap_field(form.name,with_label='True', class='form-control') }}
+                                    {% with messages = get_flashed_messages(with_categories=true) %}
+                                        {% for category, message in messages %}
+                                            {% if messages %}
+                                                <h6 class="help-block" style="color: #ff6666">{{ message }}</h6>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
                                     {{ render_bootstrap_field(form.latitude,with_label='True', class='form-control') }}
                                     {{ render_bootstrap_field(form.longitude,with_label='True',class='form-control') }}
                                     {{ render_bootstrap_field(form.district,with_label='True', class='form-control') }}
@@ -60,12 +63,12 @@
                                     {{ render_bootstrap_field(form.time_slot,with_label='True', placeholder='[h-h]',class='form-control') }}
                                 </div>
                             </fieldset>
+
                             <div class="col-lg-12 text-center">
                                 <div class="form-group" style="padding-top: 15px;">
                                     <input class="btn btn-success" type="submit" name="submit_reg" value="Salva">
-                                </div>
-                            </div>
-                        </form>
+                                </div></div>
+                            </form>
                     </div>
                 </div>
             </div>
