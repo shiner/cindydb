@@ -105,8 +105,11 @@ def view_ppc():
     if request.method == 'POST':
         old_form = EditPPC(request.form)
         key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_ppc_tuple(old_form, key)
-        return render_template('/edit-ppc.html', form=old_form)
+        if key == "":
+            return render_template('/edit-ppc.html', form=EditPPC())
+        else:
+            old_form = cindydb.utility.get_ppc_tuple(old_form, key)
+            return render_template('/edit-ppc.html', form=old_form)
     else:
         schema_to_view = 'nome, latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
         data = cindydb.database.select_query(schema_to_view, 'ppc', None, None)

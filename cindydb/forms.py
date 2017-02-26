@@ -109,7 +109,7 @@ class EditPPC(Form):
     company = StringField('Societa\'', validators=[validators.DataRequired('Inserisci la societa\'')])
     tel = StringField('Telefono', validators=[validators.DataRequired('Inserisci il numero di telefono'),
                                               validators.Length(message='Email non valida', max=15)])
-    email = StringField('Indirizzo Email', validators=[validators.Optional(),
+    email = StringField('Indirizzo Email', validators=[validators.DataRequired('Inserisci l\'indirizzo Email'),
                                                        validators.Length(message='Email non valida', min=6, max=35),
                                                        validators.Email('Inserisci l\'indirizzo email della societa\'')])
     cost = StringField('Costo orario unitario', validators=[validators.Optional()])
