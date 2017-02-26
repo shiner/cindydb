@@ -22,10 +22,6 @@ class Registration(Form):
                                                    validators.Length(message='Username non valido: lunghezza minima 4.',
                                                                      min=4, max=25)])
 
-    # email = StringField('Indirizzo Email', validators=[validators.Optional(),
-    #                                                    validators.Length(message='Email non valida', min=6, max=35),
-    #                                                    validators.Email('Inserisci il tuo indirizzo email')])
-
     password = PasswordField('Password', validators=[validators.DataRequired('Password obbligatoria'),
                                                      validators.Length(message='Password troppo corta: lunghezza minima 4.',
                                                                        min=4, max=25),
@@ -91,6 +87,29 @@ class EditPL(Form):
     name = StringField('Nome PL')
     latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
     longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
-    district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere')])
-    street = StringField('Via', validators=[validators.DataRequired('Inserisci la via')])
+    district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere'),
+                                                    validators.Length(
+                                                        message='Quartiere non valido [lunghezza massima 20]', max=20)])
+    street = StringField('Indirizzo', validators=[validators.DataRequired('Inserisci l\'indirizzo'),
+                                            validators.Length(message='Indirizzo non valido [lunghezza massima 50]',
+                                                              max=50)])
     time_slot = StringField('Fascia oraria', validators=[validators.DataRequired('Inserisci la fascia oraria')])
+
+
+class EditPPC(Form):
+    name = StringField('Nome PPC')
+    latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
+    longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
+    district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere'),
+                                                    validators.Length(
+                                                        message='Quartiere non valido [lunghezza massima 20]', max=20)])
+    street = StringField('Indirizzo', validators=[validators.DataRequired('Inserisci l\'indirizzo'),
+                                            validators.Length(message='Indirizzo non valido [lunghezza massima 50]',
+                                                              max=50)])
+    company = StringField('Societa\'', validators=[validators.DataRequired('Inserisci la societa\'')])
+    tel = StringField('Telefono', validators=[validators.DataRequired('Inserisci il numero di telefono'),
+                                              validators.Length(message='Email non valida', max=15)])
+    email = StringField('Indirizzo Email', validators=[validators.Optional(),
+                                                       validators.Length(message='Email non valida', min=6, max=35),
+                                                       validators.Email('Inserisci l\'indirizzo email della societa\'')])
+    cost = StringField('Costo orario unitario', validators=[validators.Optional()])

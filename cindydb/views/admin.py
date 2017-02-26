@@ -90,7 +90,6 @@ def edit_pl():
             return render_template('/edit-pl.html', form=new_form)
 
 
-
 @app.route('/delete-pl', methods=['POST'])
 def delete_pl():
     for tuple in request.get_json():
@@ -101,10 +100,10 @@ def delete_pl():
 @app.route('/view-ppc', methods=['POST', 'GET'])
 def view_ppc():
     if request.method == 'POST':
-        old_form = EditTuple(request.form)
+        old_form = EditPPC(request.form)
         key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_tuple(old_form, key)
-        return render_template('/edit-tuple.html', form=old_form)
+        old_form = cindydb.utility.get_ppc_tuple(old_form, key)
+        return render_template('/edit-ppc.html', form=old_form)
     else:
         schema_to_view = 'nome, latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
         data = cindydb.database.select_query(schema_to_view, 'ppc', None, None)
@@ -117,6 +116,19 @@ def view_ppc():
         res = json.dumps(results)
         return render_template('/view-ppc.html', schema_to_view=schema_to_view.split(','), results=res)
 
+
+@app.route('/edit-ppc', methods=['POST', 'GET'])
+def edit_ppc():
+        new_form = EditPPC(request.form)
+        if new_form.validate():
+            attributes_to_update = '(latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario)'
+            cond_values = (new_form.latitude.data, new_form.longitude.data, new_form.district.data,
+                           new_form.street.data, new_form.company.data, new_form.tel.data, new_form.email.data,
+                           new_form.cost.data, new_form.name.data,)
+            cindydb.database.update_query(attributes_to_update, 8, 'ppc', 'nome = %s', cond_values)
+            return redirect(url_for('view_ppc'))
+        else:
+            return render_template('/edit-ppc.html', form=new_form)
 
 @app.route('/delete-ppc', methods=['POST'])
 def delete_ppc():

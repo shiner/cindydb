@@ -43,3 +43,18 @@ def get_pl_tuple(edit_pl_form, key):
     edit_pl_form.street.data = res[0][3]
     edit_pl_form.time_slot.data = res[0][4]
     return edit_pl_form
+
+
+def get_ppc_tuple(edit_ppc_form, key):
+    schema_to_view = 'latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
+    res = cindydb.database.select_query(schema_to_view, 'ppc', 'nome = %s', (key,))
+    edit_ppc_form.name.data = key
+    edit_ppc_form.latitude.data = res[0][0]
+    edit_ppc_form.longitude.data = res[0][1]
+    edit_ppc_form.district.data = res[0][2]
+    edit_ppc_form.street.data = res[0][3]
+    edit_ppc_form.company.data = res[0][4]
+    edit_ppc_form.tel.data = res[0][5]
+    edit_ppc_form.email.data = res[0][6]
+    edit_ppc_form.cost.data =res[0][7]
+    return edit_ppc_form
