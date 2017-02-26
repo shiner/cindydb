@@ -62,8 +62,11 @@ def view_pl():
     if request.method == 'POST':
         old_form = EditPL(request.form)
         key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_pl_tuple(old_form, key)
-        return render_template('/edit-pl.html', form=old_form)
+        if key == "":
+            return render_template('/edit-pl.html', form=EditPL())
+        else:
+            old_form = cindydb.utility.get_pl_tuple(old_form, key)
+            return render_template('/edit-pl.html', form=old_form)
     else:
         schema_to_view = 'nome, latitudine, longitudine, quartiere, via, fascia_oraria'
         data = cindydb.database.select_query(schema_to_view, 'pl', None, None)
@@ -129,6 +132,7 @@ def edit_ppc():
             return redirect(url_for('view_ppc'))
         else:
             return render_template('/edit-ppc.html', form=new_form)
+
 
 @app.route('/delete-ppc', methods=['POST'])
 def delete_ppc():

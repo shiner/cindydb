@@ -84,7 +84,7 @@ class EditTuple(Form):
 
 
 class EditPL(Form):
-    name = StringField('Nome PL')
+    name = StringField('Nome PL', validators=[validators.DataRequired('Inserisci il nome del PL')])
     latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
     longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
     district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere'),
@@ -97,7 +97,7 @@ class EditPL(Form):
 
 
 class EditPPC(Form):
-    name = StringField('Nome PPC')
+    name = StringField('Nome PPC', validators=[validators.DataRequired('Inserisci il nome del PPC')])
     latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
     longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
     district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere'),

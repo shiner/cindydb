@@ -47,12 +47,16 @@
                         <form action="{{ url_for('edit_ppc') }}" method=post>
                             <fieldset>
                                 <div class="form-group">
-                                    <div class="form-group">
-                                        <label for="{{ form.name.id }}">
-                                            {{ form.name.label.text }}
-                                        </label>
-                                        {{ form.name(readonly="readonly", class='form-control') }}
-                                    </div>
+                                    {% if form.name.data %}
+                                        <div class="form-group">
+                                            <label for="{{ form.name.id }}">
+                                                {{ form.name.label.text }}
+                                            </label>
+                                            {{ form.name(readonly="readonly", class='form-control') }}
+                                        </div>
+                                    {% else %}
+                                        {{ render_bootstrap_field(form.name,with_label='True', class='form-control') }}
+                                    {% endif %}
                                     {{ render_bootstrap_field(form.latitude,with_label='True', class='form-control') }}
                                     {{ render_bootstrap_field(form.longitude,with_label='True',class='form-control') }}
                                     {{ render_bootstrap_field(form.district,with_label='True', class='form-control') }}
@@ -79,7 +83,7 @@
                             </fieldset>
                             <div class="col-lg-12 text-center">
                                 <div class="form-group" style="padding-top: 15px;">
-                                    <input class="btn btn-success" type="submit" name="submit_reg" value="Salva modifiche">
+                                    <input class="btn btn-success" type="submit" name="submit_reg" value="Salva">
                                 </div></div>
                         </form>
                     </div>
