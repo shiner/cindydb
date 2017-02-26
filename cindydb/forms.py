@@ -112,4 +112,4 @@ class EditPPC(Form):
     email = StringField('Indirizzo Email', validators=[validators.DataRequired('Inserisci l\'indirizzo Email'),
                                                        validators.Length(message='Email non valida', min=6, max=35),
                                                        validators.Email('Inserisci l\'indirizzo email della societa\'')])
-    cost = StringField('Costo orario unitario', validators=[validators.Optional()])
+    cost = StringField('Costo orario unitario', default='0.5', validators=[validators.Optional()])
