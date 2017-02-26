@@ -174,7 +174,7 @@ def view_parking_spaces():
     query_from = 'optional FULL OUTER JOIN posti_auto ON posti_auto.ppc = optional.ppc AND posti_auto.numero ' \
                  '= optional.posto_auto ' \
                  'FULL OUTER JOIN sensori ON optional.sensore = sensori.id'
-    data = cindydb.database.select_query(schema_to_query, query_from, 'posti_auto.ppc = %s', key)
+    data = cindydb.database.select_query(schema_to_query, query_from, 'posti_auto.ppc = %s', (key,))
     results = []
     columns = ('Numero', 'Lunghezza', 'Larghezza', 'Stato', 'Azienda-sensore', 'Modello-sensore')
     schema_to_view = 'Numero, Lunghezza, Larghezza, Stato, Azienda-sensore, Modello-sensore'

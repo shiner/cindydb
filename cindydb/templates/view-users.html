@@ -116,7 +116,7 @@
             $('#delete').click(
                 function () {
                     $.ajax({
-                        url: '{{ url_for('delete_tuple') }}',
+                        url: '{{ url_for('delete_user') }}',
                         data: JSON.stringify($('#table').bootstrapTable('getAllSelections')),
                         contentType: 'application/json;charset=UTF-8',
                         datatype: 'json',

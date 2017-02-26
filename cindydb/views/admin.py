@@ -42,11 +42,11 @@ def view_users():
         return render_template('/view-users.html', schema_to_view=schema_to_view.split(','), results=res)
 
 
-@app.route('/delete-tuple', methods=['POST'])
-def delete_tuple():
+@app.route('/delete-user', methods=['POST'])
+def delete_user():
     for tuple in request.get_json():
         cindydb.database.delete_query('utenti', 'cf = %s', (tuple['cf'],))
-        return redirect(url_for('view_users'))
+    return redirect(url_for('view_users'))
 
 
 @app.route('/datawarehouse')
@@ -76,6 +76,13 @@ def view_pl():
         return render_template('/view-pl.html', schema_to_view=schema_to_view.split(','), results=res)
 
 
+@app.route('/delete-pl', methods=['POST'])
+def delete_pl():
+    for tuple in request.get_json():
+        cindydb.database.delete_query('pl', 'nome = %s', (tuple['nome'],))
+    return redirect(url_for('view_pl'))
+
+
 @app.route('/view-ppc', methods=['POST', 'GET'])
 def view_ppc():
     if request.method == 'POST':
@@ -94,3 +101,10 @@ def view_ppc():
             results.append(dict(zip(columns, row)))
         res = json.dumps(results)
         return render_template('/view-ppc.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/delete-ppc', methods=['POST'])
+def delete_ppc():
+    for tuple in request.get_json():
+        cindydb.database.delete_query('ppc', 'nome = %s', (tuple['nome'],))
+    return redirect(url_for('view_ppc'))

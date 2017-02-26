@@ -32,7 +32,7 @@ def select_query(attributes, table, condition, cond_values):
     conn = get_db()
     cur = conn.cursor()
     if condition:
-        cur.execute("SELECT " + attributes + " FROM " + table + " WHERE " + condition, (cond_values,))
+        cur.execute("SELECT " + attributes + " FROM " + table + " WHERE " + condition, cond_values)
     else:
         cur.execute("SELECT " + attributes + " FROM " + table)
     conn.commit()
@@ -57,13 +57,7 @@ def insert_query(attributes, n, table, cond_values):
 
 
 def delete_query(table, condition, cond_values):
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute("DELETE FROM " + table + " WHERE " + condition, cond_values)
-        conn.commit()
-    except psycopg2.DatabaseError, e:
-        return e
-    finally:
-        if conn:
-            conn.close()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM " + table + " WHERE " + condition, cond_values)
+    conn.commit()
