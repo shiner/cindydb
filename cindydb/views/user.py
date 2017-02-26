@@ -139,40 +139,42 @@ def changepassword():
         # schema_to_view = cursor.fetchall()
 
 
-@app.route('/view-pl-users', methods=['POST', 'GET'])
+@app.route('/view-pl-users')
 def view_pl_users():
-    if request.method == 'POST':
-        old_form = EditTuple(request.form)
-        key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_tuple(old_form, key)
-        return render_template('/edit-tuple.html', form=old_form)
-    else:
-        schema_to_view = 'nome, latitudine, longitudine, quartiere, via, fascia_oraria'
-        data = cindydb.database.select_query(schema_to_view, 'pl', None, None)
-        results = []
-        columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'fascia_oraria')
+    schema_to_view = 'nome, latitudine, longitudine, quartiere, via, fascia_oraria'
+    data = cindydb.database.select_query(schema_to_view, 'pl', None, None)
+    results = []
+    columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'fascia_oraria')
 
-        for row in data:
-            results.append(dict(zip(columns, row)))
-        res = json.dumps(results)
-        return render_template('/view-pl-users.html', schema_to_view=schema_to_view.split(','), results=res)
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results)
+    return render_template('/view-pl-users.html', schema_to_view=schema_to_view.split(','), results=res)
 
 
-@app.route('/view-ppc-users', methods=['POST', 'GET'])
+@app.route('/view-ppc-users')
 def view_ppc_users():
-    if request.method == 'POST':
-        old_form = EditTuple(request.form)
-        key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_tuple(old_form, key)
-        return render_template('/edit-tuple.html', form=old_form)
-    else:
-        schema_to_view = 'nome, latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
-        data = cindydb.database.select_query(schema_to_view, 'ppc', None, None)
-        results = []
-        columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'societa', 'telefono', 'email',
-                   'costo_orario')
+    schema_to_view = 'nome, latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
+    data = cindydb.database.select_query(schema_to_view, 'ppc', None, None)
+    results = []
+    columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'societa', 'telefono', 'email',
+               'costo_orario')
 
-        for row in data:
-            results.append(dict(zip(columns, row)))
-        res = json.dumps(results)
-        return render_template('/view-ppc-users.html', schema_to_view=schema_to_view.split(','), results=res)
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results)
+    return render_template('/view-ppc-users.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/view-parking-spaces', methods=['POST', 'GET'])
+def view_parking_spaces():
+    key = dict(request.form)['jsonval'][0]
+    schema_to_view = 'numero, lunghezza, larghezza'
+    data = cindydb.database.select_query(schema_to_view, 'posti_auto', 'ppc = %s', key)
+    results = []
+    columns = ('numero', 'lunghezza', 'larghezza')
+
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results)
+    return render_template('/view-parking-spaces.html', schema_to_view=schema_to_view.split(','), results=res)
