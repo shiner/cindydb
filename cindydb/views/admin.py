@@ -60,10 +60,10 @@ def dw():
 @app.route('/view-pl', methods=['POST', 'GET'])
 def view_pl():
     if request.method == 'POST':
-        old_form = EditTuple(request.form)
+        old_form = EditPL(request.form)
         key = dict(request.form)['jsonval'][0]
-        old_form = cindydb.utility.get_tuple(old_form, key)
-        return render_template('/edit-tuple.html', form=old_form)
+        old_form = cindydb.utility.get_pl_tuple(old_form, key)
+        return render_template('/edit-pl.html', form=old_form)
     else:
         schema_to_view = 'nome, latitudine, longitudine, quartiere, via, fascia_oraria'
         data = cindydb.database.select_query(schema_to_view, 'pl', None, None)
@@ -74,6 +74,21 @@ def view_pl():
             results.append(dict(zip(columns, row)))
         res = json.dumps(results)
         return render_template('/view-pl.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/edit-pl', methods=['POST', 'GET'])
+def edit_pl():
+        new_form = EditPL(request.form)
+        if new_form.validate():
+            attributes_to_update = '(latitudine, longitudine, quartiere, via, fascia_oraria)'
+            cond_values = (new_form.latitude.data, new_form.longitude.data,
+                           new_form.district.data, new_form.street.data, new_form.time_slot.data,
+                           new_form.name.data,)
+            cindydb.database.update_query(attributes_to_update, 5, 'pl', 'nome = %s', cond_values)
+            return redirect(url_for('view_pl'))
+        else:
+            return render_template('/edit-pl.html', form=new_form)
+
 
 
 @app.route('/delete-pl', methods=['POST'])

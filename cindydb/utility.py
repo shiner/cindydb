@@ -32,3 +32,14 @@ def get_tuple(edit_tuple_form, key):
     edit_tuple_form.gender_edited.data = res[0][6]
     return edit_tuple_form
 
+
+def get_pl_tuple(edit_pl_form, key):
+    schema_to_view = 'latitudine, longitudine, quartiere, via, fascia_oraria'
+    res = cindydb.database.select_query(schema_to_view, 'pl', 'nome = %s', (key,))
+    edit_pl_form.name.data = key
+    edit_pl_form.latitude.data = res[0][0]
+    edit_pl_form.longitude.data = res[0][1]
+    edit_pl_form.district.data = res[0][2]
+    edit_pl_form.street.data = res[0][3]
+    edit_pl_form.time_slot.data = res[0][4]
+    return edit_pl_form

@@ -47,8 +47,7 @@ class Edit(Form):
                                validators=[validators.Optional()])
 
     type_edited = RadioField('Tipo di utente', default='ua', choices=[('up', 'Utente premium'),
-                                                               ('ua', 'Utente abbonato')])
-
+                                                                      ('ua', 'Utente abbonato')])
 
 
 class Login(Form):
@@ -86,3 +85,12 @@ class EditTuple(Form):
 
     type_edited = RadioField('Tipo di utente', default='ua', choices=[('up', 'Utente premium'),
                                                                       ('ua', 'Utente abbonato')])
+
+
+class EditPL(Form):
+    name = StringField('Nome PL')
+    latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
+    longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
+    district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere')])
+    street = StringField('Via', validators=[validators.DataRequired('Inserisci la via')])
+    time_slot = StringField('Fascia oraria', validators=[validators.DataRequired('Inserisci la fascia oraria')])
