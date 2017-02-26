@@ -11,12 +11,13 @@ import cindydb.utility
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
-    session.pop('logged_in', None)
-    session.pop('username', None)
-    session.pop('firstname', None)
-    session.pop('lastname', None)
-    l_form = Login(request.form)
-    return render_template('login.html', lform=l_form)
+    if session['logged_in'] == True:
+        session.pop('logged_in', None)
+        session.pop('username', None)
+        session.pop('firstname', None)
+        session.pop('lastname', None)
+        l_form = Login(request.form)
+        return render_template('login.html', lform=l_form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -63,7 +64,6 @@ def login():
             session['lastname'] = data[0][2]
             session['psw'] = hashlib.sha1(l_form.login_pass.data).hexdigest()
             return redirect(url_for('index'))
-
     return render_template('login.html', lform=l_form, form=Registration())
 
 

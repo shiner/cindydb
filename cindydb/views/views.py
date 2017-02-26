@@ -54,7 +54,9 @@ def index():
     if session.get('logged_in'):
         return render_template('homepage.html', lform=Login(), form=Registration())
     else:
-        return redirect(url_for('login'))
+        # return redirect(url_for('login'))
+        session['logged_in'] = False
+        return render_template('homepage.html', lform=Login(), form=Registration())
 
 
 @app.route('/edit-tuple', methods=['POST', 'GET'])
