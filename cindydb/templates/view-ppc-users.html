@@ -22,11 +22,11 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Settings
+                Parkings
             </h1>
             <ol class="breadcrumb">
                 <li>
-                    <i class="fa fa-cog"></i>  <a href="{{ url_for('index') }}">Settings</a>
+                    <i class="fa fa-cog"></i>  <a href="{{ url_for('index') }}">Parkings</a>
                 </li>
                 <li class="active">
                    View PPC
@@ -78,7 +78,7 @@
         var checkedRows = [];
 
         $('#table').on('check.bs.table', function (e, row) {
-            checkedRows.push(row.nome);
+            checkedRows.push(row.Nome);
             console.log(checkedRows);
             if(checkedRows.length === 1)
                 $('#view').prop("disabled",false);
@@ -88,9 +88,9 @@
 
         $('#table').on('uncheck.bs.table', function (e, row) {
             $.each(checkedRows, function(value) {
-                if (checkedRows.includes(row.nome)) {
-                    console.log(row.nome);
-                    var index = checkedRows.indexOf(row.nome);
+                if (checkedRows.includes(row.Nome)) {
+                    console.log(row.Nome);
+                    var index = checkedRows.indexOf(row.Nome);
                     checkedRows.splice(index, 1);
                 }
             });

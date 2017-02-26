@@ -32,7 +32,7 @@ def select_query(attributes, table, condition, cond_values):
     conn = get_db()
     cur = conn.cursor()
     if condition:
-        cur.execute("SELECT " + attributes + " FROM " + table + " WHERE " + condition, cond_values)
+        cur.execute("SELECT " + attributes + " FROM " + table + " WHERE " + condition, (cond_values,))
     else:
         cur.execute("SELECT " + attributes + " FROM " + table)
     conn.commit()
