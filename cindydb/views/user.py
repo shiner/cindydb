@@ -169,14 +169,17 @@ def view_ppc_users():
 @app.route('/view-parking-spaces', methods=['POST', 'GET'])
 def view_parking_spaces():
     key = dict(request.form)['jsonval'][0]
-    schema_to_query = 'posti_auto.numero, posti_auto.lunghezza, posti_auto.larghezza, optional.stato'
-    query_from = 'posti_auto FULL OUTER JOIN optional ON posti_auto.ppc = optional.ppc AND posti_auto.numero ' \
-                 '= optional.posto_auto'
+    schema_to_query = 'posti_auto.numero, posti_auto.lunghezza, posti_auto.larghezza, optional.stato, sensori.azienda, ' \
+                      'sensori.modello'
+    query_from = 'optional FULL OUTER JOIN posti_auto ON posti_auto.ppc = optional.ppc AND posti_auto.numero ' \
+                 '= optional.posto_auto ' \
+                 'FULL OUTER JOIN sensori ON optional.sensore = sensori.id'
     data = cindydb.database.select_query(schema_to_query, query_from, 'posti_auto.ppc = %s', key)
     results = []
-    columns = ('Numero', 'Lunghezza', 'Larghezza', 'Stato')
-    schema_to_view = 'Numero, Lunghezza, Larghezza, Stato'
+    columns = ('Numero', 'Lunghezza', 'Larghezza', 'Stato', 'Azienda-sensore', 'Modello-sensore')
+    schema_to_view = 'Numero, Lunghezza, Larghezza, Stato, Azienda-sensore, Modello-sensore'
     for row in data:
         results.append(dict(zip(columns, row)))
     res = json.dumps(results)
     return render_template('/view-parking-spaces.html', schema_to_view=schema_to_view.split(','), results=res)
+
