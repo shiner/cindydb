@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+
+{% block heading %}
+    {{ super() }}
+    {% block page %}Settings{% endblock %}
+{% endblock %}
+
+{% block dropdownpark %}
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    {{ super() }}
+{% endblock %}
+
+
+{% block content %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Settings
+            </h1>
+            <ol class="breadcrumb">
+                <li>
+                    <i class="fa fa-cog"></i>  <a href="{{ url_for('index') }}">Settings</a>
+                </li>
+                <li class="active">
+                   View PPC
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Parcheggi a pagamento coperti</h2>
+
+            <table id="table" class="table table-hover table-striped"
+                   data-sort-name="stargazers_count"
+                   data-sort-order="desc"
+                   data-search="true"
+                   data-show-toggle="true"
+                   data-show-columns="true"
+                   data-click-to-select="true"
+                   data-pagination="true"
+                   data-toolbar="#toolbar">
+                <thead>
+                <tr>
+                    {% for column in schema_to_view %}
+                        <th data-sortable="true" data-field={{column}}>{{column}}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <script type=text/javascript>
+
+        $(function () {
+            $('#table').bootstrapTable({
+                data: {{ results|safe }}
+            });
+        });
+
+    </script>
+
+{% endblock %}

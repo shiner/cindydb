@@ -118,10 +118,13 @@
                 {{ nav_link('forms', 'fa fa-fw fa-edit', ' Forms') }}
                 {{ nav_link('bootstrap_elements', 'fa fa-fw fa-desktop', ' Bootstrap Elements') }}
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-table"></i> Tables <i class="fa fa-fw fa-caret-down"></i></a>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-car"></i> Parkings <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="demo" class="collapse">
                         {{ nav_link('tables', '', ' Tables') }}
-                        {{ nav_link('view_users', '', ' Users') }}
+                        {% block dropdownpark %}
+                        {{ nav_link('view_pl_users', '', ' View PL') }}
+                        {{ nav_link('view_ppc_users', '', ' View PCC') }}
+                        {% endblock %}
                     </ul>
                 </li>
 
@@ -129,6 +132,13 @@
                     {{ nav_link('dw', 'fa fa-line-chart', ' Analysis') }}
                     {% block dropdownusers %}
                     {{ nav_link('view_users', 'fa fa-users', ' Users') }}
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#admin"><i class="fa fa-cog"></i> Settings <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="admin" class="collapse">
+                            {{ nav_link('view_pl', '', ' View PL') }}
+                            {{ nav_link('view_ppc', '', ' View PPC') }}
+                        </ul>
+                    </li>
                     {% endblock %}
                 {% endif %}
             </ul>

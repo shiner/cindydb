@@ -6,6 +6,7 @@ from cindydb.forms import *
 from cindydb import app
 from psycopg2 import extras
 import cindydb.utility
+import json
 
 
 @app.route('/logout')
@@ -136,3 +137,42 @@ def changepassword():
         #                "table_name='utenti'")
         # conn.commit()
         # schema_to_view = cursor.fetchall()
+
+
+@app.route('/view-pl-users', methods=['POST', 'GET'])
+def view_pl_users():
+    if request.method == 'POST':
+        old_form = EditTuple(request.form)
+        key = dict(request.form)['jsonval'][0]
+        old_form = cindydb.utility.get_tuple(old_form, key)
+        return render_template('/edit-tuple.html', form=old_form)
+    else:
+        schema_to_view = 'nome, latitudine, longitudine, quartiere, via, fascia_oraria'
+        data = cindydb.database.select_query(schema_to_view, 'pl', None, None)
+        results = []
+        columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'fascia_oraria')
+
+        for row in data:
+            results.append(dict(zip(columns, row)))
+        res = json.dumps(results)
+        return render_template('/view-pl-users.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/view-ppc-users', methods=['POST', 'GET'])
+def view_ppc_users():
+    if request.method == 'POST':
+        old_form = EditTuple(request.form)
+        key = dict(request.form)['jsonval'][0]
+        old_form = cindydb.utility.get_tuple(old_form, key)
+        return render_template('/edit-tuple.html', form=old_form)
+    else:
+        schema_to_view = 'nome, latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario'
+        data = cindydb.database.select_query(schema_to_view, 'ppc', None, None)
+        results = []
+        columns = ('nome', 'latitudine', 'longitudine', 'quartiere', 'via', 'societa', 'telefono', 'email',
+                   'costo_orario')
+
+        for row in data:
+            results.append(dict(zip(columns, row)))
+        res = json.dumps(results)
+        return render_template('/view-ppc-users.html', schema_to_view=schema_to_view.split(','), results=res)
