@@ -130,6 +130,7 @@
 
                 {%  if session['username'] == 'admin' %}
                     {{ nav_link('dw', 'fa fa-line-chart', ' Analysis') }}
+                    {{ nav_link('sales', 'fa fa-shopping-cart', ' Sales') }}
                     {% block dropdownusers %}
                     {{ nav_link('view_users', 'fa fa-users', ' Users') }}
                     <li>

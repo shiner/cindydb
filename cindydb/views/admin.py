@@ -185,3 +185,21 @@ def delete_ppc():
     for tuple in request.get_json():
         cindydb.database.delete_query('ppc', 'nome = %s', (tuple['nome'],))
     return redirect(url_for('view_ppc'))
+
+
+@app.route('/sales')
+def sales():
+    schema_to_view = 'vendite.id_fattura, vendite.data_rilascio, ppc.societa, ppc.via, vendite.pass,' \
+                     'pass.zona_ztl, pass.durata, utenti.nome, utenti.cognome, vendite.automobile, automobili.marca'
+    query_from = 'vendite JOIN ppc ON vendite.ppc = ppc.nome JOIN utenti ON vendite.utente = utenti.cf JOIN automobili ' \
+                 'ON vendite.automobile = automobili.targa JOIN pass ON vendite.pass = pass.codice'
+    data = cindydb.database.select_query(schema_to_view, query_from, None, None)
+    results = []
+    columns = ('Fattura', 'Data-rilascio', 'SocietaPPC', 'ViaPPC', 'Pass', 'Zona-validita', 'Durata-mesi',
+               'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca auto')
+    schema_to_view = 'Fattura, Data-rilascio, SocietaPPC, ViaPPC, Pass, Zona-validita, Durata-mesi, ' \
+                     'Nome-cliente, Cognome-cliente, Automobile, Marca auto'
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results, default=cindydb.utility.myconverter)
+    return render_template('/sales.html', schema_to_view=schema_to_view.split(','), results=res)
