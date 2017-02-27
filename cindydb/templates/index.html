@@ -97,7 +97,10 @@
                     {% block dropdown %}
                         <ul class="dropdown-menu">
                             <li>
-                                <a href='/profile'><i class="fa fa-fw fa-user"></i> Profile</a>
+                                <a href='/profile'><i class="fa fa-fw fa-user"></i> Profilo</a>
+                            </li>
+                            <li>
+                                <a href='/profile'><i class="fa fa-car"></i> Automobili</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -114,15 +117,12 @@
 
             <ul class="nav navbar-nav side-nav">
                 {{ nav_link('index', 'fa fa-fw fa-home', ' Home page') }}
-                {{ nav_link('charts', 'fa fa-fw fa-bar-chart-o', ' Charts') }}
-                {{ nav_link('forms', 'fa fa-fw fa-edit', ' Forms') }}
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-car"></i> Parkings <i class="fa fa-fw fa-caret-down"></i></a>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-car"></i> Parcheggi <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="demo" class="collapse">
-                        {{ nav_link('tables', '', ' Tables') }}
                         {% block dropdownpark %}
-                        {{ nav_link('view_pl_users', '', ' View PL') }}
-                        {{ nav_link('view_ppc_users', '', ' View PCC') }}
+                        {{ nav_link('view_pl_users', '', ' Visualizza PL') }}
+                        {{ nav_link('view_ppc_users', '', ' Visualizza PCC') }}
                         {% endblock %}
                     </ul>
                 </li>
@@ -132,7 +132,7 @@
                     <a href="javascript:;" data-toggle="collapse" data-target="#passg"><i class="fa fa-credit-card"></i> Pass <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="passg" class="collapse">
                         {% block dropdownpassg %}
-                        {{ nav_link('pass_guest_list', 'fa fa-list-alt', ' Pass List') }}
+                        {{ nav_link('pass_guest_list', 'fa fa-list-alt', ' Elenco Pass') }}
                         {% endblock %}
                     </ul>
                 </li>
@@ -141,22 +141,22 @@
                     <a href="javascript:;" data-toggle="collapse" data-target="#pass"><i class="fa fa-credit-card"></i> Pass <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="pass" class="collapse">
                         {% block dropdownpass %}
-                        {{ nav_link('pass_user_list', 'fa fa-list-alt', ' Pass List') }}
+                        {{ nav_link('pass_user_list', 'fa fa-list-alt', ' Elenco Pass') }}
                         {{ nav_link('purchase_history', 'fa fa-shopping-cart', ' Storico acquisti') }}
                         {% endblock %}
                     </ul>
                 </li>
                 {% endif %}
                 {%  if session['username'] == 'admin' %}
-                    {{ nav_link('dw', 'fa fa-line-chart', ' Analysis') }}
-                    {{ nav_link('sales', 'fa fa-shopping-cart', ' Pass sales') }}
+                    {{ nav_link('dw', 'fa fa-line-chart', ' Analisi') }}
+                    {{ nav_link('sales', 'fa fa-shopping-cart', ' Vendite Pass') }}
                     {% block dropdownusers %}
-                    {{ nav_link('view_users', 'fa fa-users', ' Users') }}
+                    {{ nav_link('view_users', 'fa fa-users', ' Utenti') }}
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#admin"><i class="fa fa-cog"></i> Settings <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#admin"><i class="fa fa-cog"></i> Impostazioni <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="admin" class="collapse">
-                            {{ nav_link('view_pl', '', ' View PL') }}
-                            {{ nav_link('view_ppc', '', ' View PPC') }}
+                            {{ nav_link('view_pl', '', ' Visualizza PL') }}
+                            {{ nav_link('view_ppc', '', ' Visualizza PPC') }}
                         </ul>
                     </li>
                     {% endblock %}
