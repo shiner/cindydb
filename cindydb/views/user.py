@@ -163,9 +163,13 @@ def shop():
     new_form = ShopPass(request.form)
     new_form.auto.choices = utility.get_auto_choises()
     new_form.ppc.choices = utility.get_ppc_choises()
+
+    id = cindydb.database.select_one_query('id_fattura', 'vendite', ' order by id_fattura desc')
+
+    next_id = int(id[0]) + 1
     if new_form.validate():
         attributes = '(id_fattura, ppc, utente, pass, automobile, data_rilascio)'
-        cond_values = ('id1', new_form.ppc.data, session.get('cf'),
+        cond_values = (next_id , new_form.ppc.data, session.get('cf'),
                        new_form.cod.data, new_form.auto.data, new_form.date.data)
         cindydb.database.insert_query(attributes, 6, 'vendite', cond_values)
         return redirect(url_for('purchase_history'))

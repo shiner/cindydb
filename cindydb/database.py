@@ -61,3 +61,12 @@ def delete_query(table, condition, cond_values):
     cur = conn.cursor()
     cur.execute("DELETE FROM " + table + " WHERE " + condition, cond_values)
     conn.commit()
+
+
+def select_one_query(attributes, table, condition):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT " + attributes + " FROM " + table + condition)
+    conn.commit()
+    res = cur.fetchone()
+    return res
