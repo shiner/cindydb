@@ -194,3 +194,43 @@ def purchase_history():
     res = json.dumps(results, default=cindydb.utility.myconverter)
     return render_template('/purchase-history.html', schema_to_view=schema_to_view.split(','), results=res)
 
+
+@app.route('/auto')
+def auto():
+    if session.get('logged_in'):
+
+        attributes = 'targa, marca, modello, lunghezza, larghezza'
+        data = cindydb.database.select_query(attributes, 'automobili', 'proprietario = %s',
+                                             (session.get('cf'),))
+        results = []
+        columns = ('Targa', 'Marca', 'Modello', 'Lunghezza', 'Larghezza')
+        schema_to_view = 'Targa, Marca, Modello, Lunghezza, Larghezza'
+        for row in data:
+            results.append(dict(zip(columns, row)))
+        res = json.dumps(results)
+        return render_template('/auto.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/new-auto', methods=['POST', 'GET'])
+def new_auto():
+    new_form = NewAuto(request.form)
+    if request.method == 'POST':
+        if new_form.validate():
+            data = cindydb.database.select_query('*', 'automobili', 'targa = %s',
+                                                 (new_form.targa.data,))
+            if len(data) == 0:
+                if new_form.lung.data == '':
+                    new_form.lung.data = None
+                if new_form.larg.data == '':
+                    new_form.larg.data = None
+                attributes = '(targa, modello, marca, proprietario, lunghezza, larghezza)'
+                cond_values = (new_form.targa.data, new_form.modello.data, new_form.marca.data,
+                               session.get('cf'), new_form.lung.data, new_form.larg.data)
+                cindydb.database.insert_query(attributes, 6, 'automobili', cond_values)
+                return redirect(url_for('auto'))
+            else:
+                flash('Auto esistente!', category='error')
+                return render_template('/new-auto.html', form=new_form)
+        else:
+            return render_template('/new-auto.html', form=new_form)
+    return render_template('/new-auto.html', form=NewAuto())

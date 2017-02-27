@@ -125,3 +125,12 @@ class ShopPass(Form):
     auto = SelectField('Automobile',
                        validators=[validators.DataRequired('Non hai registrato automobili')])
     date = DateField('Data di rilascio', default=datetime.datetime.now().date())
+
+
+class NewAuto(Form):
+    targa = StringField('Targa', validators=[validators.DataRequired('Inserisci la targa della tua auto')])
+    modello = StringField('Modello auto', validators=[validators.DataRequired('Inserisci il modello della tua auto')])
+    marca = StringField('Marca auto', validators=[validators.DataRequired('Inserisci la marca della tua auto')])
+    lung = StringField('Lunghezza auto', validators=[validators.Optional()])
+    larg = StringField('Larghezza auto', validators=[validators.Optional()])
+
