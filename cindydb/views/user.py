@@ -234,3 +234,30 @@ def new_auto():
         else:
             return render_template('/new-auto.html', form=new_form)
     return render_template('/new-auto.html', form=NewAuto())
+
+
+@app.route('/stops')
+def stops():
+    results = []
+    schema_to_view = 'soste.codice, soste.automobile, soste.ppc, soste.posto_auto, ' \
+                     'soste.data_inizio, soste.data_fine, ppc.costo_orario, extract(hours from ' \
+                     '(soste.data_fine-soste.data_inizio)::interval) as durata, ' \
+                     'to_char(round((extract(hours from (soste.data_fine-soste.data_inizio)::interval)*ppc.costo_orario)::' \
+                     'numeric, 2),\'99999D99\') as prezzo'
+    query_from = 'soste JOIN ppc ON soste.ppc = ppc.nome'
+    data = cindydb.database.select_query(schema_to_view, query_from, 'soste.utente = %s', (session.get('cf'),))
+    schema_to_view = 'soste_passate.codice, soste_passate.automobile, soste_passate.ppc, ' \
+                     'soste_passate.posto_auto, soste_passate.data_inizio, soste_passate.data_fine, ppc.costo_orario, ' \
+                     'extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval) as durata, ' \
+                     'to_char(round((extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval)*' \
+                     'ppc.costo_orario)::numeric, 2),\'99999D99\') as prezzo'
+    query_from = 'soste_passate JOIN ppc ON soste_passate.ppc = ppc.nome'
+    data2 = cindydb.database.select_query(schema_to_view, query_from, 'soste_passate.utente = %s', (session.get('cf'),))
+    union = list(set(data).union(data2))
+
+    columns = ('Codice', 'Automobile', 'PPC', 'Posto-auto', 'Data-inizio', 'Data-fine', 'Costo-orario', 'Durata', 'Prezzo')
+    schema_to_view = 'Codice, Automobile, PPC, Posto-auto, Data-inizio, Data-fine, Costo-orario, Durata, Prezzo'
+    for row in union:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results, default=cindydb.utility.myconverter)
+    return render_template('/stops.html', schema_to_view=schema_to_view.split(','), results=res)

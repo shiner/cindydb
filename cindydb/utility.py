@@ -2,6 +2,7 @@ import cindydb.database
 import datetime
 from flask import session
 
+
 def myconverter(o):
     if isinstance(o, datetime.date):
         return o.__str__()

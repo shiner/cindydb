@@ -126,6 +126,17 @@
                         {% endblock %}
                     </ul>
                 </li>
+                {% if session['logged_in'] == True%}
+                    <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#soste"><i class="fa fa-product-hunt"></i> Soste <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="soste" class="collapse">
+                        {% block dropdownsoste %}
+                        {{ nav_link('pass_guest_list', '', ' Prenota sosta') }}
+                        {{ nav_link('stops', '', ' Visualizza soste') }}
+                        {% endblock %}
+                    </ul>
+                </li>
+                {% endif %}
 
                 {% if session['logged_in'] == False %}
                     <li>
