@@ -67,7 +67,12 @@
                                     </div>
                                     {{ render_bootstrap_field(form.ppc,with_label='True', class='form-control') }}
                                     {{ render_bootstrap_field(form.auto,with_label='True',class='form-control') }}
-                                    {{ render_bootstrap_field(form.date,with_label='True', class='form-control') }}
+                                    <div class="form-group">
+                                        <label for="{{ form.date.id }}">
+                                            {{ form.date.label.text }}
+                                        </label>
+                                        {{ form.date(readonly="readonly", class='form-control') }}
+                                    </div>
                                 </div>
 
                                 {% with messages = get_flashed_messages(with_categories=true) %}

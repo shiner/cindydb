@@ -117,13 +117,11 @@ class EditPPC(Form):
 
 
 class ShopPass(Form):
-    # res = utility.get_ppc_providers()
     cod = StringField('Codice PASS')
     time = StringField('Durata PASS [mesi]')
     cost = StringField('Costo PASS [euro]')
     ppc = SelectField('PPC',
-                      validators=[validators.DataRequired()])
+                      validators=[validators.DataRequired('Non sono disponibili PPC')])
     auto = SelectField('Automobile',
-                       validators=[validators.DataRequired()])
-    date = DateField('Data di rilascio', default=datetime.datetime.now().date(),
-                           validators=[validators.DataRequired('Inserisci la data odierna [%Y-%m-%d]')])
+                       validators=[validators.DataRequired('Non hai registrato automobili')])
+    date = DateField('Data di rilascio', default=datetime.datetime.now().date())

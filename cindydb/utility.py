@@ -66,14 +66,23 @@ def get_pass_tuple(shop_pass_form, key):
     shop_pass_form.cod.data = key
     shop_pass_form.time.data = res[0][1]
     shop_pass_form.cost.data = res[0][2]
+    shop_pass_form.ppc.choices = get_ppc_choises()
+    shop_pass_form.auto.choices = get_auto_choises()
+    return shop_pass_form
+
+
+def get_ppc_choises():
     providers = cindydb.database.select_query('ppc.nome', 'ppc', 'char_length(ppc.nome) > 1', None)
     choises = []
     for record in providers:
         choises.append(record + record)
-    shop_pass_form.ppc.choices = choises
+    return choises
+
+
+def get_auto_choises():
     auto = cindydb.database.select_query('automobili.targa', 'automobili', 'proprietario = %s', (session.get('cf'),))
     auto_choises = []
     for record in auto:
         auto_choises.append(record + record)
-    shop_pass_form.auto.choices = auto_choises
-    return shop_pass_form
+    return auto_choises
+

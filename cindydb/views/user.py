@@ -160,16 +160,17 @@ def pass_user_list():
 
 @app.route('/shop', methods=['POST', 'GET'])
 def shop():
-        new_form = EditPPC(request.form)
-        if new_form.validate():
-            attributes_to_update = '(latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario)'
-            cond_values = (new_form.latitude.data, new_form.longitude.data, new_form.district.data,
-                           new_form.street.data, new_form.company.data, new_form.tel.data, new_form.email.data,
-                           new_form.cost.data, new_form.name.data,)
-            cindydb.database.update_query(attributes_to_update, 8, 'ppc', 'nome = %s', cond_values)
-            return redirect(url_for('purchase_history'))
-        else:
-            return render_template('/shop.html', form=new_form)
+    new_form = ShopPass(request.form)
+    new_form.auto.choices = utility.get_auto_choises()
+    new_form.ppc.choices = utility.get_ppc_choises()
+    if new_form.validate():
+        attributes = '(id_fattura, ppc, utente, pass, automobile, data_rilascio)'
+        cond_values = ('id1', new_form.ppc.data, session.get('cf'),
+                       new_form.cod.data, new_form.auto.data, new_form.date.data)
+        cindydb.database.insert_query(attributes, 6, 'vendite', cond_values)
+        return redirect(url_for('purchase_history'))
+    else:
+        return render_template('/shop.html', form=new_form)
 
 
 @app.route('/purchase-history')
