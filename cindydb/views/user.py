@@ -142,7 +142,7 @@ def changepassword():
 @app.route('/pass-user', methods=['POST', 'GET'])
 def pass_user_list():
     if request.method == 'POST':
-        old_form = EditTuple(request.form)
+        old_form = ShopPass(request.form)
         key = dict(request.form)['jsonval'][0]
         old_form = cindydb.utility.get_pass_tuple(old_form, key)
         return render_template('/shop.html', form=old_form)
@@ -156,6 +156,20 @@ def pass_user_list():
             results.append(dict(zip(columns, row)))
         res = json.dumps(results)
         return render_template('/pass-user.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/shop', methods=['POST', 'GET'])
+def shop():
+        new_form = EditPPC(request.form)
+        if new_form.validate():
+            attributes_to_update = '(latitudine, longitudine, quartiere, via, societa, telefono, email, costo_orario)'
+            cond_values = (new_form.latitude.data, new_form.longitude.data, new_form.district.data,
+                           new_form.street.data, new_form.company.data, new_form.tel.data, new_form.email.data,
+                           new_form.cost.data, new_form.name.data,)
+            cindydb.database.update_query(attributes_to_update, 8, 'ppc', 'nome = %s', cond_values)
+            return redirect(url_for('purchase_history'))
+        else:
+            return render_template('/shop.html', form=new_form)
 
 
 @app.route('/purchase-history')

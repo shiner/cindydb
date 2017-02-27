@@ -1,5 +1,6 @@
 from wtforms import Form, StringField, PasswordField, validators, DateField, SelectField, RadioField
-
+import datetime
+import utility
 
 class Registration(Form):
     firstname = StringField('Nome', validators=[validators.DataRequired('Inserisci il tuo nome')])
@@ -113,3 +114,16 @@ class EditPPC(Form):
                                                        validators.Length(message='Email non valida', min=6, max=35),
                                                        validators.Email('Inserisci l\'indirizzo email della societa\'')])
     cost = StringField('Costo orario unitario', default='0.5', validators=[validators.Optional()])
+
+
+class ShopPass(Form):
+    # res = utility.get_ppc_providers()
+    cod = StringField('Codice PASS')
+    time = StringField('Durata PASS [mesi]')
+    cost = StringField('Costo PASS [euro]')
+    ppc = SelectField('PPC',
+                      validators=[validators.DataRequired()])
+    auto = SelectField('Automobile',
+                       validators=[validators.DataRequired()])
+    date = DateField('Data di rilascio', default=datetime.datetime.now().date(),
+                           validators=[validators.DataRequired('Inserisci la data odierna [%Y-%m-%d]')])

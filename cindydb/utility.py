@@ -1,6 +1,6 @@
 import cindydb.database
 import datetime
-
+from flask import session
 
 def myconverter(o):
     if isinstance(o, datetime.date):
@@ -56,16 +56,24 @@ def get_ppc_tuple(edit_ppc_form, key):
     edit_ppc_form.company.data = res[0][4]
     edit_ppc_form.tel.data = res[0][5]
     edit_ppc_form.email.data = res[0][6]
-    edit_ppc_form.cost.data =res[0][7]
+    edit_ppc_form.cost.data = res[0][7]
     return edit_ppc_form
 
 
 def get_pass_tuple(shop_pass_form, key):
     schema_to_view = 'zona_ztl, durata, costo'
     res = cindydb.database.select_query(schema_to_view, 'pass', 'codice = %s', (key,))
-    shop_pass_form.codice.data = key
-    shop_pass_form.zona_ztl.data = res[0][0]
-    shop_pass_form.durata.data = res[0][1]
-    shop_pass_form.costo.data = res[0][2]
+    shop_pass_form.cod.data = key
+    shop_pass_form.time.data = res[0][1]
+    shop_pass_form.cost.data = res[0][2]
+    providers = cindydb.database.select_query('ppc.nome', 'ppc', 'char_length(ppc.nome) > 1', None)
+    choises = []
+    for record in providers:
+        choises.append(record + record)
+    shop_pass_form.ppc.choices = choises
+    auto = cindydb.database.select_query('automobili.targa', 'automobili', 'proprietario = %s', (session.get('cf'),))
+    auto_choises = []
+    for record in auto:
+        auto_choises.append(record + record)
+    shop_pass_form.auto.choices = auto_choises
     return shop_pass_form
-
