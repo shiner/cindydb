@@ -116,7 +116,6 @@
                 {{ nav_link('index', 'fa fa-fw fa-home', ' Home page') }}
                 {{ nav_link('charts', 'fa fa-fw fa-bar-chart-o', ' Charts') }}
                 {{ nav_link('forms', 'fa fa-fw fa-edit', ' Forms') }}
-                {{ nav_link('bootstrap_elements', 'fa fa-fw fa-desktop', ' Bootstrap Elements') }}
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-car"></i> Parkings <i class="fa fa-fw fa-caret-down"></i></a>
                     <ul id="demo" class="collapse">
@@ -128,9 +127,29 @@
                     </ul>
                 </li>
 
+                {% if session['logged_in'] == False %}
+                    <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#passg"><i class="fa fa-credit-card"></i> Pass <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="passg" class="collapse">
+                        {% block dropdownpassg %}
+                        {{ nav_link('pass_guest_list', 'fa fa-list-alt', ' Pass List') }}
+                        {% endblock %}
+                    </ul>
+                </li>
+                {% else %}
+                 <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#pass"><i class="fa fa-credit-card"></i> Pass <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="pass" class="collapse">
+                        {% block dropdownpass %}
+                        {{ nav_link('pass_user_list', 'fa fa-list-alt', ' Pass List') }}
+                        {{ nav_link('purchase_history', 'fa fa-shopping-cart', ' Storico acquisti') }}
+                        {% endblock %}
+                    </ul>
+                </li>
+                {% endif %}
                 {%  if session['username'] == 'admin' %}
                     {{ nav_link('dw', 'fa fa-line-chart', ' Analysis') }}
-                    {{ nav_link('sales', 'fa fa-shopping-cart', ' Sales') }}
+                    {{ nav_link('sales', 'fa fa-shopping-cart', ' Pass sales') }}
                     {% block dropdownusers %}
                     {{ nav_link('view_users', 'fa fa-users', ' Users') }}
                     <li>

@@ -196,9 +196,9 @@ def sales():
     data = cindydb.database.select_query(schema_to_view, query_from, None, None)
     results = []
     columns = ('Fattura', 'Data-rilascio', 'SocietaPPC', 'ViaPPC', 'Pass', 'Zona-validita', 'Durata-mesi',
-               'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca auto')
+               'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca-auto')
     schema_to_view = 'Fattura, Data-rilascio, SocietaPPC, ViaPPC, Pass, Zona-validita, Durata-mesi, ' \
-                     'Nome-cliente, Cognome-cliente, Automobile, Marca auto'
+                     'Nome-cliente, Cognome-cliente, Automobile, Marca-auto'
     for row in data:
         results.append(dict(zip(columns, row)))
     res = json.dumps(results, default=cindydb.utility.myconverter)

@@ -49,3 +49,16 @@ def view_parking_spaces():
         results.append(dict(zip(columns, row)))
     res = json.dumps(results)
     return render_template('/view-parking-spaces.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/pass-guest')
+def pass_guest_list():
+    schema_to_view = 'codice, zona_ztl, durata, costo'
+    data = cindydb.database.select_query(schema_to_view, 'pass', None, None)
+    results = []
+    columns = ('Codice', 'Zona_ZTL', 'Durata-mesi', 'Costo')
+    schema_to_view = 'Codice, Zona_ZTL, Durata-mesi, Costo'
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results)
+    return render_template('/pass-guest.html', schema_to_view=schema_to_view.split(','), results=res)

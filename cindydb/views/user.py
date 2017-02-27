@@ -139,4 +139,39 @@ def changepassword():
         # schema_to_view = cursor.fetchall()
 
 
+@app.route('/pass-user', methods=['POST', 'GET'])
+def pass_user_list():
+    if request.method == 'POST':
+        old_form = EditTuple(request.form)
+        key = dict(request.form)['jsonval'][0]
+        old_form = cindydb.utility.get_pass_tuple(old_form, key)
+        return render_template('/shop.html', form=old_form)
+    else:
+        schema_to_view = 'codice, zona_ztl, durata, costo'
+        data = cindydb.database.select_query(schema_to_view, 'pass', None, None)
+        results = []
+        columns = ('Codice', 'Zona_ZTL', 'Durata-mesi', 'Costo')
+        schema_to_view = 'Codice, Zona_ZTL, Durata-mesi, Costo'
+        for row in data:
+            results.append(dict(zip(columns, row)))
+        res = json.dumps(results)
+        return render_template('/pass-user.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+@app.route('/purchase-history')
+def purchase_history():
+    schema_to_view = 'vendite.id_fattura, vendite.data_rilascio, ppc.societa, ppc.via, vendite.pass,' \
+                     'pass.zona_ztl, pass.durata, vendite.automobile, automobili.marca, automobili.modello'
+    query_from = 'vendite JOIN ppc ON vendite.ppc = ppc.nome JOIN utenti ON vendite.utente = utenti.cf JOIN automobili ' \
+                 'ON vendite.automobile = automobili.targa JOIN pass ON vendite.pass = pass.codice'
+    data = cindydb.database.select_query(schema_to_view, query_from, 'utenti.cf = %s', (session.get('cf'),))
+    results = []
+    columns = ('Fattura', 'Data-rilascio', 'SocietaPPC', 'ViaPPC', 'Pass', 'Zona-validita', 'Durata-mesi',
+               'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca-auto', 'Modello-auto')
+    schema_to_view = 'Fattura, Data-rilascio, SocietaPPC, ViaPPC, Pass, Zona-validita, Durata-mesi, ' \
+                     'Nome-cliente, Cognome-cliente, Automobile, Marca-auto, Modello-auto'
+    for row in data:
+        results.append(dict(zip(columns, row)))
+    res = json.dumps(results, default=cindydb.utility.myconverter)
+    return render_template('/purchase-history.html', schema_to_view=schema_to_view.split(','), results=res)
 
