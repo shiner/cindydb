@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import request, session, redirect, url_for, render_template, flash
+from flask import request, session, redirect, url_for, render_template, flash, g
 import cindydb.database
 import hashlib
 from cindydb.forms import *
@@ -236,37 +236,7 @@ def new_auto():
     return render_template('/new-auto.html', form=NewAuto())
 
 
-# @app.route('/stops')
-# def stops():
-#     results = []
-#     schema_to_view = 'soste.codice, soste.automobile, soste.ppc, soste.posto_auto, ' \
-#                      'soste.data_inizio, soste.data_fine, ppc.costo_orario, extract(hours from ' \
-#                      '(soste.data_fine-soste.data_inizio)::interval) as durata, ' \
-#                      'to_char(round((extract(hours from (soste.data_fine-soste.data_inizio)::interval)*ppc.costo_orario)::' \
-#                      'numeric, 2),\'99999D99\') as prezzo'
-#     query_from = 'soste JOIN ppc ON soste.ppc = ppc.nome'
-#     data = cindydb.database.select_query(schema_to_view, query_from, 'soste.utente = %s', (session.get('cf'),))
-#     schema_to_view = 'soste_passate.codice, soste_passate.automobile, soste_passate.ppc, ' \
-#                      'soste_passate.posto_auto, soste_passate.data_inizio, soste_passate.data_fine, ppc.costo_orario, ' \
-#                      'extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval) as durata, ' \
-#                      'to_char(round((extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval)*' \
-#                      'ppc.costo_orario)::numeric, 2),\'99999D99\') as prezzo'
-#     query_from = 'soste_passate JOIN ppc ON soste_passate.ppc = ppc.nome'
-#     data2 = cindydb.database.select_query(schema_to_view, query_from, 'soste_passate.utente = %s', (session.get('cf'),))
-#     union = list(set(data).union(data2))
-#
-#     columns = ('Codice', 'Automobile', 'PPC', 'Posto-auto', 'Data-inizio', 'Data-fine', 'Costo-orario', 'Durata', 'Prezzo')
-#     schema_to_view = 'Codice, Automobile, PPC, Posto-auto, Data-inizio, Data-fine, Costo-orario, Durata, Prezzo'
-#     for row in union:
-#         results.append(dict(zip(columns, row)))
-#     res = json.dumps(results, default=cindydb.utility.myconverter)
-#     return render_template('/stops.html', schema_to_view=schema_to_view.split(','), results=res)
 
-
-
-
-
-booking_form = Booking()
 
 @app.route('/booking', methods=['POST', 'GET'])
 def booking():
@@ -274,19 +244,21 @@ def booking():
         new_form = Booking(request.form)
         new_form = cindydb.utility.get_booking_tuple(new_form)
         if new_form.validate():
-            booking_form = new_form
+            session['auto'] = new_form.auto.data
+            session['data_fine'] = new_form.data_fine.data
+            session['data_inizio'] = new_form.data_inizio.data
             results = []
-            schema_to_view = 'soste_passate.ppc, soste_passate.posto_auto, optional.stato '
+            schema_to_view = 'posti_auto.ppc, posti_auto.numero, optional.stato '
             query_from = 'ppc JOIN soste_passate ON soste_passate.ppc = ppc.nome JOIN posti_auto ON ppc.nome = posti_auto.ppc' \
-                         ' RIGHT OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
+                         ' LEFT OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
             condition = '((%s <= soste_passate.data_inizio and %s <= soste_passate.data_fine) OR (%s >= soste_passate.data_inizio' \
                         ' and %s >= soste_passate.data_fine)) AND optional.stato = \'libero\''
             var_condition = (new_form.data_inizio.data, new_form.data_fine.data,
                              new_form.data_inizio.data, new_form.data_fine.data,)
             data = cindydb.database.select_query(schema_to_view, query_from, condition, var_condition)
-            schema_to_view = 'soste_passate.ppc, soste_passate.posto_auto, optional.stato '
+            schema_to_view = 'posti_auto.ppc, posti_auto.numero, optional.stato '
             query_from = 'ppc JOIN soste_passate ON soste_passate.ppc = ppc.nome JOIN posti_auto ON ppc.nome = posti_auto.ppc' \
-                         ' RIGHT OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
+                         ' LEFT OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
             condition = '((%s <= soste_passate.data_inizio and %s <= soste_passate.data_fine) OR (%s >= soste_passate.data_inizio' \
                         ' and %s >= soste_passate.data_fine)) AND soste_passate.posto_auto NOT IN (SELECT posto_auto from optional ' \
                         'WHERE posto_auto=soste_passate.posto_auto)'
@@ -317,46 +289,39 @@ def stops():
         posto_auto = request.json[0]['PostoAuto']
 
         id = cindydb.database.select_one_query('codice', 'soste_passate', ' order by codice desc')
-        next_id = int(id[0]) + 1
+        id2 = cindydb.database.select_one_query('codice', 'soste', ' order by codice desc')
+        if id > id2:
+            next_id = int(id[0]) + 1
+        else:
+            next_id = int(id2[0]) + 1
+
 
         attributes = '(codice, utente, automobile, posto_auto, ppc, data_inizio, data_fine)'
-        cond_values = (next_id, session.get('cf'), booking_form.auto.data, ppc, posto_auto,
-                       booking_form.data_inizio.data, booking_form.data_fine.data)
+        cond_values = (next_id, session.get('cf'), session.get('auto'), posto_auto, ppc,
+                       session.get('data_inizio'), session.get('data_fine'),)
         cindydb.database.insert_query(attributes, 7, 'soste', cond_values)
-    results = []
-    schema_to_view = 'soste.codice, soste.automobile, soste.ppc, soste.posto_auto, ' \
-                     'soste.data_inizio, soste.data_fine, ppc.costo_orario, extract(hours from ' \
-                     '(soste.data_fine-soste.data_inizio)::interval) as durata, ' \
-                     'to_char(round((extract(hours from (soste.data_fine-soste.data_inizio)::interval)*ppc.costo_orario)::' \
-                     'numeric, 2),\'99999D99\') as prezzo'
-    query_from = 'soste JOIN ppc ON soste.ppc = ppc.nome'
-    data = cindydb.database.select_query(schema_to_view, query_from, 'soste.utente = %s', (session.get('cf'),))
-    schema_to_view = 'soste_passate.codice, soste_passate.automobile, soste_passate.ppc, ' \
-                     'soste_passate.posto_auto, soste_passate.data_inizio, soste_passate.data_fine, ppc.costo_orario, ' \
-                     'extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval) as durata, ' \
-                     'to_char(round((extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval)*' \
-                     'ppc.costo_orario)::numeric, 2),\'99999D99\') as prezzo'
-    query_from = 'soste_passate JOIN ppc ON soste_passate.ppc = ppc.nome'
-    data2 = cindydb.database.select_query(schema_to_view, query_from, 'soste_passate.utente = %s', (session.get('cf'),))
-    union = list(set(data).union(data2))
+        return redirect(url_for('stops'))
+    else:
+        results = []
+        schema_to_view = 'soste.codice, soste.automobile, soste.ppc, soste.posto_auto, ' \
+                         'soste.data_inizio, soste.data_fine, ppc.costo_orario, extract(hours from ' \
+                         '(soste.data_fine-soste.data_inizio)::interval) as durata, ' \
+                         'to_char(round((extract(hours from (soste.data_fine-soste.data_inizio)::interval)*ppc.costo_orario)::' \
+                         'numeric, 2),\'99999D99\') as prezzo'
+        query_from = 'soste JOIN ppc ON soste.ppc = ppc.nome'
+        data = cindydb.database.select_query(schema_to_view, query_from, 'soste.utente = %s', (session.get('cf'),))
+        schema_to_view = 'soste_passate.codice, soste_passate.automobile, soste_passate.ppc, ' \
+                         'soste_passate.posto_auto, soste_passate.data_inizio, soste_passate.data_fine, ppc.costo_orario, ' \
+                         'extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval) as durata, ' \
+                         'to_char(round((extract(hours from (soste_passate.data_fine-soste_passate.data_inizio)::interval)*' \
+                         'ppc.costo_orario)::numeric, 2),\'99999D99\') as prezzo'
+        query_from = 'soste_passate JOIN ppc ON soste_passate.ppc = ppc.nome'
+        data2 = cindydb.database.select_query(schema_to_view, query_from, 'soste_passate.utente = %s', (session.get('cf'),))
+        union = list(set(data).union(data2))
 
-    columns = ('Codice', 'Automobile', 'PPC', 'Posto-auto', 'Data-inizio', 'Data-fine', 'Costo-orario', 'Durata', 'Prezzo')
-    schema_to_view = 'Codice, Automobile, PPC, Posto-auto, Data-inizio, Data-fine, Costo-orario, Durata, Prezzo'
-    for row in union:
-        results.append(dict(zip(columns, row)))
-    res = json.dumps(results, default=cindydb.utility.myconverter)
-    return render_template('/stops.html', schema_to_view=schema_to_view.split(','), results=res)
-
-# @app.route('/stops', methods=['POST'])
-# def booking_ok():
-#     ppc = dict(request.form)['jsonval'][0]
-#     posto_auto = dict(request.form)['jsonval'][1]
-#
-#     id = cindydb.database.select_one_query('codice', 'soste', ' order by codice desc')
-#     next_id = int(id[0]) + 1
-#
-#     attributes = '(codice, utente, automobile, posto_auto, ppc, data_inizio, data_fine)'
-#     cond_values = (next_id, session.get('cf'), booking_form.auto.data, ppc, posto_auto,
-#                    booking_form.data_inizio, booking_form.data_fine)
-#     cindydb.database.insert_query(attributes, 7, 'soste', cond_values)
-#     return redirect(url_for('stops'))
+        columns = ('Codice', 'Automobile', 'PPC', 'Posto-auto', 'Data-inizio', 'Data-fine', 'Costo-orario', 'Durata', 'Prezzo')
+        schema_to_view = 'Codice, Automobile, PPC, Posto-auto, Data-inizio, Data-fine, Costo-orario, Durata, Prezzo'
+        for row in union:
+            results.append(dict(zip(columns, row)))
+        res = json.dumps(results, default=cindydb.utility.myconverter)
+        return render_template('/stops.html', schema_to_view=schema_to_view.split(','), results=res)
