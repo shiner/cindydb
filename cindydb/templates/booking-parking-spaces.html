@@ -44,21 +44,9 @@
 
             <div class="row" style="padding-top: 20px">
                 <div id="toolbar" >
-                    <span style="float:left;">
-                        <form id="send" method="post" action="{{ url_for('view_pl') }}" onsubmit="getJSON()" enctype='application/json'>
-                            <button id="delete" type="button" class="btn btn-danger" style="margin-right: 20px">
-                                <i class="glyphicon glyphicon-remove"></i> Cancella</button>
-                            <button id="edit" type="submit" class="btn btn-info" disabled style="margin-right: 20px">
-                                <i class="glyphicon glyphicon-pencil"></i> Modifica</button>
-                            <input type="hidden" name="jsonval" value=""/>
-                         </form>
-                    </span>
-                    <span style="float:left;">
-                        <form id="insert" action="{{ url_for('new_pl') }}">
-                            <button id="insert" type="submit" class="btn btn-success">
-                                <i class="glyphicon glyphicon-plus"></i> Inserisci</button>
-                       </form>
-                    </span>
+                    <button id="edit" type="submit" class="btn btn-success" disabled style="margin-right: 20px">
+                        Prenota</button>
+                    <input type="hidden" name="jsonval" value=""/>
                 </div>
             </div>
 
@@ -73,7 +61,7 @@
                    data-toolbar="#toolbar">
                 <thead>
                 <tr>
-                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="state" data-radio="true" ></th>
                     {% for column in schema_to_view %}
                         <th data-sortable="true" data-field={{column}}>{{column}}</th>
                     {% endfor %}
@@ -91,43 +79,16 @@
             });
         });
 
-        var checkedRows = [];
-
         $('#table').on('check.bs.table', function (e, row) {
-            checkedRows.push(row.nome);
-            console.log(checkedRows);
-            if(checkedRows.length === 1)
-                $('#edit').prop("disabled",false);
-            else
-                $('#edit').prop("disabled",true);
+            $('#edit').prop("disabled",false);
         });
-
-        $('#table').on('uncheck.bs.table', function (e, row) {
-            $.each(checkedRows, function(value) {
-                if (checkedRows.includes(row.nome)) {
-                    console.log(row.nome);
-                    var index = checkedRows.indexOf(row.nome);
-                    checkedRows.splice(index, 1);
-                }
-            });
-            console.log(checkedRows);
-            if(checkedRows.length === 1)
-                $('#edit').prop("disabled",false);
-            else
-                $('#edit').prop("disabled",true);
-        });
-
-        function getJSON(){
-            var formInfo = document.forms['send'];
-            formInfo.jsonval.value = checkedRows;
-        }
 
         $(function() {
-            $('#delete').click(
+            $('#edit').click(
                 function () {
                     $.ajax({
-                        url: '{{ url_for('delete_pl') }}',
-                        data: JSON.stringify($('#table').bootstrapTable('getAllSelections')),
+                        url: '{{ url_for('stops') }}',
+                        data: JSON.stringify($('#table').bootstrapTable('getSelections')),
                         contentType: 'application/json;charset=UTF-8',
                         datatype: 'json',
                         type: 'POST',
@@ -141,19 +102,6 @@
                 });
         });
 
-        $(function () {
-            $('#delete').click(function () {
-                var ids = $.map($('#table').bootstrapTable('getSelections'), function (row) {
-                    console.log(row.nome);
-                    return row.nome;
-                });
-                checkedRows = [];
-                $('#table').bootstrapTable('remove', {
-                    field: 'nome',
-                    values: ids
-                });
-            });
-        });
     </script>
 
 {% endblock %}
