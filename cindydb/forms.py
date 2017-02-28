@@ -1,6 +1,7 @@
 from wtforms import Form, StringField, PasswordField, validators, DateField, SelectField, RadioField
 import datetime
-import utility
+from time import gmtime, strftime
+
 
 class Registration(Form):
     firstname = StringField('Nome', validators=[validators.DataRequired('Inserisci il tuo nome')])
@@ -133,4 +134,17 @@ class NewAuto(Form):
     marca = StringField('Marca auto', validators=[validators.DataRequired('Inserisci la marca della tua auto')])
     lung = StringField('Lunghezza auto', validators=[validators.Optional()])
     larg = StringField('Larghezza auto', validators=[validators.Optional()])
+
+
+class Booking(Form):
+
+    auto = SelectField('Automobile',
+                       validators=[validators.DataRequired('Non hai registrato automobili')])
+    data_inizio = StringField('Data di inzio sosta', default=datetime.datetime.today().replace(microsecond=0),
+                            validators=[validators.DataRequired('Inserisci la data di inizio sosta')])
+    data_fine = StringField('Data di fine sosta [%Y-%m-%d %H:%M:%S]', validators=[validators.DataRequired('Inserisci la'
+                                                                                                        ' data di fine '
+                                                                                                        'sosta')])
+    # posto_auto = StringField('Posto_auto', validators=[validators.DataRequired('Inserisci la targa della tua auto')])
+    # ppc = StringField('PPC', validators=[validators.DataRequired('Inserisci la targa della tua auto')])
 

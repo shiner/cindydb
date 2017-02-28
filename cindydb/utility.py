@@ -87,3 +87,7 @@ def get_auto_choises():
         auto_choises.append(record + record)
     return auto_choises
 
+
+def get_booking_tuple(booking_form):
+    booking_form.auto.choices = get_auto_choises()
+    return booking_form

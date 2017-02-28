@@ -161,8 +161,8 @@ def pass_user_list():
 @app.route('/shop', methods=['POST', 'GET'])
 def shop():
     new_form = ShopPass(request.form)
-    new_form.auto.choices = utility.get_auto_choises()
-    new_form.ppc.choices = utility.get_ppc_choises()
+    new_form.auto.choices = cindydb.utility.get_auto_choises()
+    new_form.ppc.choices = cindydb.utility.get_ppc_choises()
 
     id = cindydb.database.select_one_query('id_fattura', 'vendite', ' order by id_fattura desc')
 
@@ -261,3 +261,47 @@ def stops():
         results.append(dict(zip(columns, row)))
     res = json.dumps(results, default=cindydb.utility.myconverter)
     return render_template('/stops.html', schema_to_view=schema_to_view.split(','), results=res)
+
+
+
+
+
+
+@app.route('/booking', methods=['POST', 'GET'])
+def booking():
+    if request.method == 'POST':
+        new_form = Booking(request.form)
+        new_form = cindydb.utility.get_booking_tuple(new_form)
+        if new_form.validate():
+            results = []
+            schema_to_view = 'soste_passate.ppc, soste_passate.posto_auto, optional.stato '
+            query_from = 'ppc JOIN soste_passate ON soste_passate.ppc = ppc.nome JOIN posti_auto ON ppc.nome = posti_auto.ppc' \
+                         ' FULL OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
+            condition = '((%s <= soste_passate.data_inizio and %s <= soste_passate.data_fine) OR (%s >= soste_passate.data_inizio' \
+                        ' and %s >= soste_passate.data_fine)) AND optional.stato = \'libero\''
+            var_condition = (new_form.data_inizio.data, new_form.data_fine.data,
+                             new_form.data_inizio.data, new_form.data_fine.data,)
+            data = cindydb.database.select_query(schema_to_view, query_from, condition, var_condition)
+            schema_to_view = 'soste_passate.ppc, soste_passate.posto_auto, optional.stato '
+            query_from = 'ppc JOIN soste_passate ON soste_passate.ppc = ppc.nome JOIN posti_auto ON ppc.nome = posti_auto.ppc' \
+                         ' FULL OUTER JOIN optional ON soste_passate.posto_auto = optional.posto_auto'
+            condition = '((%s <= soste_passate.data_inizio and %s <= soste_passate.data_fine) OR (%s >= soste_passate.data_inizio' \
+                        ' and %s >= soste_passate.data_fine)) AND soste_passate.posto_auto NOT IN (SELECT posto_auto from optional ' \
+                        'WHERE posto_auto=soste_passate.posto_auto)'
+            var_condition = (new_form.data_inizio.data, new_form.data_fine.data,
+                             new_form.data_inizio.data, new_form.data_fine.data,)
+            data2 = cindydb.database.select_query(schema_to_view, query_from, condition, var_condition)
+            union = list(set(data).union(data2))
+
+            columns = ('PPC', 'Posto-auto', 'Stato')
+            schema_to_view = 'PPC, Posto-auto, Stato'
+            for row in union:
+                results.append(dict(zip(columns, row)))
+            res = json.dumps(results)
+            return render_template('/booking-parking-spaces.html', schema_to_view=schema_to_view.split(','), results=res)
+        else:
+            return render_template('/booking.html', form=new_form)
+    else:
+        new_form = cindydb.utility.get_booking_tuple(Booking())
+        new_form.auto.choices = cindydb.utility.get_auto_choises()
+        return render_template('/booking.html', form=new_form)
