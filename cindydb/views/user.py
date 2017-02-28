@@ -4,7 +4,6 @@ import cindydb.database
 import hashlib
 from cindydb.forms import *
 from cindydb import app
-from psycopg2 import extras
 import cindydb.utility
 import json
 
