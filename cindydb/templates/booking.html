@@ -35,7 +35,12 @@
                             <fieldset>
                                 <div class="form-group">
                                     {{ render_bootstrap_field(form.auto,with_label='True', class='form-control') }}
-                                    {{ render_bootstrap_field(form.data_inizio,with_label='True',class='form-control') }}
+                                    <div class="form-group">
+                                        <label for="{{ form.data_inizio.id }}">
+                                            {{ form.data_inizio.label.text }}
+                                        </label>
+                                        {{ form.data_inizio(readonly="readonly", class='form-control') }}
+                                    </div>
                                     {{ render_bootstrap_field(form.data_fine,with_label='True',class='form-control') }}
                                     {% with messages = get_flashed_messages(with_categories=true) %}
                                         {% for category, message in messages %}

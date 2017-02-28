@@ -93,7 +93,7 @@
                         datatype: 'json',
                         type: 'POST',
                         success: function (response) {
-                            console.log(response);
+                            window.location.replace("{{ url_for('stops') }}");
                         },
                         error: function (error) {
                             console.log(error);
