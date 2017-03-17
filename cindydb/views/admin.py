@@ -17,6 +17,7 @@ def edit_tuple():
                            new_form.dob_edited.data, new_form.type_edited.data, new_form.number_edited.data,
                            new_form.gender_edited.data, new_form.cf.data,)
             cindydb.database.update_query(attributes_to_update, 6, 'utenti', 'cf = %s', cond_values)
+            flash('Modifica effettuata', category='success')
             return redirect(url_for('view_users'))
         else:
             return render_template('/edit-tuple.html', form=new_form)
@@ -99,6 +100,7 @@ def edit_pl():
                            new_form.district.data, new_form.street.data, new_form.time_slot.data,
                            new_form.name.data,)
             cindydb.database.update_query(attributes_to_update, 5, 'pl', 'nome = %s', cond_values)
+            flash('Modifica effettuata', category='success')
             return redirect(url_for('view_pl'))
         else:
             return render_template('/edit-pl.html', form=new_form)
@@ -119,6 +121,7 @@ def new_pl():
                     cond_values = (new_form.name.data, new_form.latitude.data, new_form.longitude.data,
                                    new_form.district.data, new_form.street.data, new_form.time_slot.data)
                     cindydb.database.insert_query(attributes, 6, 'pl', cond_values)
+                    flash('Nuovo PL inserito', category='success')
                     return redirect(url_for('view_pl'))
                 else:
                     flash('PL esistente!', category='error')
@@ -176,6 +179,7 @@ def edit_ppc():
                            new_form.street.data, new_form.company.data, new_form.tel.data, new_form.email.data,
                            new_form.cost.data, new_form.name.data,)
             cindydb.database.update_query(attributes_to_update, 8, 'ppc', 'nome = %s', cond_values)
+            flash('Modifica effettuata', category='success')
             return redirect(url_for('view_ppc'))
         else:
             return render_template('/edit-ppc.html', form=new_form)
@@ -186,7 +190,8 @@ def edit_ppc():
 @app.route('/new-ppc', methods=['POST', 'GET'])
 def new_ppc():
     if session.get('logged_in') and session.get('cf') == 'admin':
-        new_form = EditPPC(request.form)
+        new_form = NewPPC(request.form)
+        new_form.sensor.choices = cindydb.utility.get_sensor_choices()
         if request.method == 'POST':
             if new_form.validate():
                 data = cindydb.database.select_query('*', 'ppc', 'nome = %s',
@@ -196,14 +201,41 @@ def new_ppc():
                     cond_values = (new_form.name.data, new_form.latitude.data, new_form.longitude.data,
                                    new_form.district.data, new_form.street.data, new_form.company.data,
                                    new_form.tel.data, new_form.email.data, new_form.cost.data)
-                    cindydb.database.insert_query(attributes, 9, 'ppc', cond_values)
+                    if new_form.number.data == '':
+                        cindydb.database.insert_query(attributes, 9, 'ppc', cond_values)
+                    else:
+                        if new_form.lung.data == '' or new_form.larg.data == '':
+                            if new_form.lung.data == '':
+                                flash('Devi inserire entrambe le dimensioni per il posto auto', category='lung')
+                            if new_form.larg.data == '':
+                                flash('Devi inserire entrambe le dimensioni per il posto auto', category='larg')
+                            return render_template('/new-ppc.html', form=new_form)
+                        else:
+                            cindydb.database.insert_query(attributes, 9, 'ppc', cond_values)
+                            attributes_pa = '(numero, ppc, lunghezza, larghezza)'
+                            for i in xrange(1, int(new_form.number.data)+1):
+                                cond_values_pa = (i, new_form.name.data, new_form.lung.data, new_form.larg.data,)
+                                cindydb.database.insert_query(attributes_pa, 4, 'posti_auto', cond_values_pa)
+                            if new_form.sensor.data != ' ':
+                                data = new_form.sensor.data.split(' - ')
+                                azienda = str(data[0])
+                                modello = str(data[1])
+                                id = cindydb.database.select_query('id', 'sensori', 'modello = %s '
+                                                                                    'AND azienda = %s',
+                                                                   (modello, azienda, ))
+                                attributes_op = '(posto_auto, ppc, sensore, stato)'
+                                for i in xrange(1, int(new_form.number.data) + 1):
+                                    cond_values_op = (i, new_form.name.data, id[0][0], 'libero',)
+                                    cindydb.database.insert_query(attributes_op, 4, 'optional', cond_values_op)
+
+                    flash('Nuovo PPC inserito', category='success')
                     return redirect(url_for('view_ppc'))
                 else:
                     flash('PPC esistente!', category='error')
                     return render_template('/new-ppc.html', form=new_form)
             else:
                 return render_template('/new-ppc.html', form=new_form)
-        return render_template('/new-ppc.html', form=EditPPC())
+        return render_template('/new-ppc.html', form=new_form)
     else:
         return redirect(url_for('login'))
 
@@ -222,15 +254,16 @@ def delete_ppc():
 def sales():
     if session.get('logged_in') and session.get('cf') == 'admin':
         schema_to_view = 'vendite.id_fattura, vendite.data_rilascio, ppc.societa, ppc.via, vendite.pass,' \
-                         'pass.zona_ztl, pass.durata, utenti.nome, utenti.cognome, vendite.automobile, automobili.marca'
+                         'pass.zona_ztl, pass.durata, utenti.nome, utenti.cognome, vendite.automobile, automobili.marca, ' \
+                         'pass.costo'
         query_from = 'vendite JOIN ppc ON vendite.ppc = ppc.nome JOIN utenti ON vendite.utente = utenti.cf JOIN automobili ' \
                      'ON vendite.automobile = automobili.targa JOIN pass ON vendite.pass = pass.codice'
         data = cindydb.database.select_query(schema_to_view, query_from, None, None)
         results = []
         columns = ('Fattura', 'Data-rilascio', 'SocietaPPC', 'ViaPPC', 'Pass', 'Zona-validita', 'Durata-mesi',
-                   'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca-auto')
+                   'Nome-cliente', 'Cognome-cliente', 'Automobile', 'Marca-auto', 'Costo')
         schema_to_view = 'Fattura, Data-rilascio, SocietaPPC, ViaPPC, Pass, Zona-validita, Durata-mesi, ' \
-                         'Nome-cliente, Cognome-cliente, Automobile, Marca-auto'
+                         'Nome-cliente, Cognome-cliente, Automobile, Marca-auto, Costo'
         for row in data:
             results.append(dict(zip(columns, row)))
         res = json.dumps(results, default=cindydb.utility.myconverter)

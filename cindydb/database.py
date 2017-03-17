@@ -70,3 +70,37 @@ def select_one_query(attributes, table, condition):
     conn.commit()
     res = cur.fetchone()
     return res
+
+
+def booking_query(lung, larg, di, df):
+    conn = get_db()
+    cur = conn.cursor()
+    query = '(SELECT posti_auto.ppc, posti_auto.numero, optional.stato, posti_auto.lunghezza, posti_auto.larghezza ' \
+            'FROM posti_auto LEFT OUTER JOIN optional ON posti_auto.numero = optional.posto_auto ' \
+            'AND posti_auto.ppc = optional.ppc ' \
+            'WHERE (posti_auto.ppc, posti_auto.numero) NOT IN (SELECT optional.ppc, optional.posto_auto ' \
+            'FROM optional WHERE optional.stato = \'occupato\') ' \
+            'AND posti_auto.lunghezza >= %s AND posti_auto.larghezza >= %s ) ' \
+            'EXCEPT ' \
+            '(SELECT posti_auto.ppc, posti_auto.numero, optional.stato, posti_auto.lunghezza, posti_auto.larghezza ' \
+            'FROM posti_auto JOIN soste_passate ON soste_passate.ppc = posti_auto.ppc AND soste_passate.posto_auto = ' \
+            'posti_auto.numero ' \
+            'FULL OUTER JOIN optional ON posti_auto.numero = optional.posto_auto AND posti_auto.ppc = optional.ppc ' \
+            'WHERE (%s >= soste_passate.data_inizio AND %s <= soste_passate.data_fine) OR ' \
+            '(%s < soste_passate.data_inizio AND %s > ' \
+            'soste_passate.data_fine) OR (%s < soste_passate.data_fine) ' \
+            'UNION ' \
+            'SELECT posti_auto.ppc, posti_auto.numero, optional.stato, posti_auto.lunghezza, posti_auto.larghezza ' \
+            'FROM posti_auto JOIN soste ON soste.ppc = posti_auto.ppc AND soste.posto_auto = posti_auto.numero ' \
+            'FULL OUTER JOIN optional ON posti_auto.numero = optional.posto_auto AND posti_auto.ppc = optional.ppc ' \
+            'WHERE (%s >= soste.data_inizio AND %s <= soste.data_fine) OR (%s < soste.data_inizio AND %s > ' \
+            'soste.data_fine) OR (%s < soste.data_fine))'
+
+    cur.execute(query, (lung, larg, di, df, di, df, di, di, df, di, df, di, ))
+
+    conn.commit()
+    res = cur.fetchall()
+    return res
+
+
+

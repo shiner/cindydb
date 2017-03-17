@@ -91,3 +91,13 @@ def get_auto_choises():
 def get_booking_tuple(booking_form):
     booking_form.auto.choices = get_auto_choises()
     return booking_form
+
+
+def get_sensor_choices():
+    sensors = cindydb.database.select_query('azienda, modello', 'sensori', None, None)
+    sensor_choises = []
+    sensor_choises.append(("", ""))
+    for record in sensors:
+        new_data = ' - '.join(record)
+        sensor_choises.append((new_data, new_data))
+    return sensor_choises

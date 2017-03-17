@@ -145,6 +145,28 @@ class Booking(Form):
     data_fine = StringField('Data di fine sosta [%Y-%m-%d %H:%M:%S]', validators=[validators.DataRequired('Inserisci la'
                                                                                                         ' data di fine '
                                                                                                         'sosta')])
-    # posto_auto = StringField('Posto_auto', validators=[validators.DataRequired('Inserisci la targa della tua auto')])
-    # ppc = StringField('PPC', validators=[validators.DataRequired('Inserisci la targa della tua auto')])
+
+
+class NewPPC(Form):
+    name = StringField('Nome PPC', validators=[validators.DataRequired('Inserisci il nome del PPC')])
+    latitude = StringField('Latitudine', validators=[validators.DataRequired('Inserisci la latitudine')])
+    longitude = StringField('Longitudine', validators=[validators.DataRequired('Inserisci la longitudine')])
+    district = StringField('Quartiere', validators=[validators.DataRequired('Inserisci il quartiere'),
+                                                    validators.Length(
+                                                        message='Quartiere non valido [lunghezza massima 20]', max=20)])
+    street = StringField('Indirizzo', validators=[validators.DataRequired('Inserisci l\'indirizzo'),
+                                            validators.Length(message='Indirizzo non valido [lunghezza massima 50]',
+                                                              max=50)])
+    company = StringField('Societa\'', validators=[validators.DataRequired('Inserisci la societa\'')])
+    tel = StringField('Telefono', validators=[validators.DataRequired('Inserisci il numero di telefono'),
+                                              validators.Length(message='Email non valida', max=15)])
+    email = StringField('Indirizzo Email', validators=[validators.DataRequired('Inserisci l\'indirizzo Email'),
+                                                       validators.Length(message='Email non valida', min=6, max=35),
+                                                       validators.Email('Inserisci l\'indirizzo email della societa\'')])
+    cost = StringField('Costo orario unitario', default='0.5', validators=[validators.Optional()])
+
+    number = StringField('Numero di posti auto', validators=[validators.Optional()])
+    sensor = SelectField('Sensore', validators=[validators.Optional()])
+    lung = StringField('Lunghezza posti auto', validators=[validators.Optional()])
+    larg = StringField('Larghezza posti auto', validators=[validators.Optional()])
 
